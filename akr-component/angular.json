@@ -9,6 +9,14 @@
     "projects": {
         "lib": {
             "projectType": "library",
+            "schematics": {
+                "@schematics/angular": {
+                    "component": {
+                        "type": "component",
+                        "changeDetection": "OnPush"
+                    }
+                }
+            },
             "root": "projects/lib",
             "sourceRoot": "projects/lib/src",
             "prefix": "akr",
@@ -35,7 +43,14 @@
         },
         "docs": {
             "projectType": "application",
-            "schematics": {},
+            "schematics": {
+                "@schematics/angular": {
+                    "component": {
+                        "type": "component",
+                        "changeDetection": "OnPush"
+                    }
+                }
+            },
             "root": "projects/docs",
             "sourceRoot": "projects/docs/src",
             "prefix": "app",
