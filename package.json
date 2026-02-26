@@ -1,8 +1,14 @@
 {
     "name": "akr-component",
     "private": true,
-    "workspaces": ["packages/*"],
+    "workspaces": [
+        "packages/*"
+    ],
     "scripts": {
+        "format": "oxfmt",
         "commit": "gemini --yolo -p \"Commit the staged source code.\""
+    },
+    "dependencies": {
+        "oxfmt": "^0.35.0"
     }
 }
