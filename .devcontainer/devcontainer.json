@@ -5,9 +5,6 @@
     "dockerComposeFile": "docker-compose.yml",
     "service": "app",
     "workspaceFolder": "/workspace",
-    "containerEnv": {
-        "GOOGLE_CLOUD_PROJECT": "${localEnv:GOOGLE_CLOUD_PROJECT}"
-    },
     "postAttachCommand": {
         "bun": "bun upgrade"
     },
