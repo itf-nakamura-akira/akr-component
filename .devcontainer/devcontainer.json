@@ -14,6 +14,7 @@
                 "editor.codeLens": true,
                 "npm.packageManager": "bun",
                 "npm.scriptRunner": "bun",
+                "npm.exclude": ["**/akr-component/dist/**"],
                 "workbench.colorCustomizations": {
                     "activityBar.background": "#cf2c70",
                     "activityBar.activeBackground": "#cf2c70",

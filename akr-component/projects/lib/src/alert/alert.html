@@ -1,0 +1,32 @@
+<div
+    class="alert"
+    role="alert"
+    [class.alert-info]="severity() === 'info'"
+    [class.alert-success]="severity() === 'success'"
+    [class.alert-warning]="severity() === 'warning'"
+    [class.alert-error]="severity() === 'error'"
+>
+    <div class="alert-icon">
+        @switch (severity()) {
+            @case ('info') {
+                <span class="material-symbols-outlined">info</span>
+            }
+            @case ('success') {
+                <span class="material-symbols-outlined">check_circle</span>
+            }
+            @case ('warning') {
+                <span class="material-symbols-outlined">warning</span>
+            }
+            @case ('error') {
+                <span class="material-symbols-outlined">error</span>
+            }
+        }
+    </div>
+    <div class="alert-message">{{ message() }}</div>
+    @if (closable()) {
+        <button type="button" class="alert-close" aria-label="Close" (click)="closeAlert.emit()">
+            <span class="sr-only">Close</span>
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    }
+</div>
