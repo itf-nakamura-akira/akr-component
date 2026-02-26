@@ -9,6 +9,6 @@
         "newlinesBetween": false
     },
     "experimentalTailwindcss": {
-        "attributes": ["class", "[class]"]
+        "attributes": ["[class]"]
     }
 }
