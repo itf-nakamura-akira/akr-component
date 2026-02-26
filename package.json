@@ -1,0 +1,7 @@
+{
+    "name": "akr-component",
+    "workspaces": ["packages/*"],
+    "scripts": {
+        "commit": "gemini --yolo -p \"Commit the staged source code.\""
+    }
+}

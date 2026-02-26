@@ -1,0 +1,18 @@
+services:
+    app:
+        container_name: akr-component
+
+        build:
+            context: ./app
+            dockerfile: Dockerfile
+
+        volumes:
+            - ../:/workspace:cached
+            - ~/.gemini/GEMINI.md:/root/.gemini/GEMINI.md
+
+        env_file: ./app/.env
+
+        ports:
+            - '4000:4000' # Docs
+
+        command: sleep infinity
