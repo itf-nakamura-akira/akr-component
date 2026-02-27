@@ -1,0 +1,29 @@
+<akr-alert severity="info">Sample message.</akr-alert>
+<akr-alert severity="success">Sample message.</akr-alert>
+<akr-alert severity="warning">Sample message.</akr-alert>
+<akr-alert severity="error">Sample message.</akr-alert>
+
+<akr-alert severity="info" [showIcon]="false">Sample message.</akr-alert>
+<akr-alert severity="success" [showIcon]="false">Sample message.</akr-alert>
+<akr-alert severity="warning" [showIcon]="false">Sample message.</akr-alert>
+<akr-alert severity="error" [showIcon]="false">Sample message.</akr-alert>
+
+@if (showInfoAlert()) {
+    <akr-alert severity="info" [closable]="true" (closeAlert)="showInfoAlert.set(false)"> Sample message. </akr-alert>
+}
+
+@if (showSuccessAlert()) {
+    <akr-alert severity="success" [closable]="true" (closeAlert)="showSuccessAlert.set(false)">
+        Sample message.
+    </akr-alert>
+}
+
+@if (showWarningAlert()) {
+    <akr-alert severity="warning" [closable]="true" (closeAlert)="showWarningAlert.set(false)">
+        Sample message.
+    </akr-alert>
+}
+
+@if (showErrorAlert()) {
+    <akr-alert severity="error" [closable]="true" (closeAlert)="showErrorAlert.set(false)"> Sample message. </akr-alert>
+}

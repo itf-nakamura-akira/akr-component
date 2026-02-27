@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AlertComponent } from './alert.component';
+import Alert from './alert';
 
-describe('AlertComponent', () => {
-    let component: AlertComponent;
-    let fixture: ComponentFixture<AlertComponent>;
+describe('Alert', () => {
+    let component: Alert;
+    let fixture: ComponentFixture<Alert>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [AlertComponent],
+            imports: [Alert],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(AlertComponent);
+        fixture = TestBed.createComponent(Alert);
         component = fixture.componentInstance;
         await fixture.whenStable();
     });

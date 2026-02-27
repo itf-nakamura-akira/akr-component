@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { AkrIcon } from '../internal/icon/icon';
 
 /**
  * A type that defines the severity of the alert.
@@ -13,7 +14,7 @@ export type AlertSeverity = 'info' | 'success' | 'warning' | 'error';
  */
 @Component({
     selector: 'akr-alert',
-    imports: [],
+    imports: [AkrIcon],
     templateUrl: './alert.html',
     styleUrl: './alert.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,14 +26,14 @@ export class AkrAlert {
     readonly severity = input.required<AlertSeverity>();
 
     /**
-     * Alert message.
+     * Show Icon.
      */
-    readonly message = input.required();
+    readonly showIcon = input<boolean>(true);
 
     /**
      * Show Close Button.
      */
-    readonly closable = input<boolean>();
+    readonly closable = input<boolean>(false);
 
     /**
      * Close button click event.

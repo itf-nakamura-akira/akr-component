@@ -6,27 +6,18 @@
     [class.alert-warning]="severity() === 'warning'"
     [class.alert-error]="severity() === 'error'"
 >
-    <div class="alert-icon">
-        @switch (severity()) {
-            @case ('info') {
-                <span class="material-symbols-outlined">info</span>
-            }
-            @case ('success') {
-                <span class="material-symbols-outlined">check_circle</span>
-            }
-            @case ('warning') {
-                <span class="material-symbols-outlined">warning</span>
-            }
-            @case ('error') {
-                <span class="material-symbols-outlined">error</span>
-            }
-        }
+    @if (showIcon()) {
+        <div class="alert-icon">
+            <akr-icon [name]="severity()" />
+        </div>
+    }
+    <div class="alert-message">
+        <ng-content />
     </div>
-    <div class="alert-message">{{ message() }}</div>
     @if (closable()) {
         <button type="button" class="alert-close" aria-label="Close" (click)="closeAlert.emit()">
             <span class="sr-only">Close</span>
-            <span class="material-symbols-outlined">close</span>
+            <akr-icon name="close" />
         </button>
     }
 </div>

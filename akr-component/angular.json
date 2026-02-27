@@ -3,7 +3,10 @@
     "version": 1,
     "cli": {
         "packageManager": "bun",
-        "analytics": "88fb5258-dca0-4ca1-bded-0e96ea45803f"
+        "analytics": "88fb5258-dca0-4ca1-bded-0e96ea45803f",
+        "cache": {
+            "enabled": false
+        }
     },
     "newProjectRoot": "projects",
     "projects": {
@@ -12,7 +15,6 @@
             "schematics": {
                 "@schematics/angular": {
                     "component": {
-                        "type": "component",
                         "changeDetection": "OnPush"
                     }
                 }
@@ -52,7 +54,6 @@
             "schematics": {
                 "@schematics/angular": {
                     "component": {
-                        "type": "component",
                         "changeDetection": "OnPush"
                     }
                 }

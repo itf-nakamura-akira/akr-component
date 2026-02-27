@@ -6,7 +6,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'alert',
-                loadComponent: () => import('./pages/components/alert/alert.component'),
+                loadComponent: () => import('./pages/components/alert/alert'),
             },
             {
                 path: '**',
@@ -19,7 +19,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'install',
-                loadComponent: () => import('./pages/guides/install/install.component'),
+                loadComponent: () => import('./pages/guides/install/install'),
             },
             {
                 path: '**',
@@ -29,6 +29,6 @@ export const routes: Routes = [
     },
     {
         path: '**',
-        redirectTo: 'guides/install',
+        redirectTo: 'components/alert',
     },
 ];
