@@ -38,6 +38,12 @@
                     "options": {
                         "tsConfig": "projects/lib/tsconfig.spec.json"
                     }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": ["projects/lib/src/**/*.ts", "projects/lib/src/**/*.html"]
+                    }
                 }
             }
         },
@@ -116,6 +122,12 @@
                     "builder": "@angular/build:unit-test",
                     "options": {
                         "tsConfig": "projects/docs/tsconfig.spec.json"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": ["projects/docs/src/**/*.ts", "projects/docs/src/**/*.html"]
                     }
                 }
             }
