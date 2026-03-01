@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 /**
  * A type that defines the icon name.
  */
-export type IconName = 'info' | 'success' | 'warning' | 'error' | 'close';
+export type IconName = 'info' | 'success' | 'warning' | 'error' | 'close' | 'keyboard_arrow_right';
 
 /**
  * Internal Icon Component.

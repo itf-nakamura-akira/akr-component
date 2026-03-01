@@ -1,34 +1,50 @@
 import { Routes } from '@angular/router';
+import { Layout } from './core/components/layout/layout';
 
 export const routes: Routes = [
     {
-        path: 'components',
+        path: '',
+        component: Layout,
         children: [
             {
-                path: 'alert',
-                loadComponent: () => import('./pages/components/alert/alert'),
+                path: 'components',
+                children: [
+                    {
+                        path: 'alert',
+                        loadComponent: () => import('./pages/components/alert/alert'),
+                    },
+                    {
+                        path: 'navigation-tree',
+                        loadComponent: () => import('./pages/components/navigation-tree/navigation-tree'),
+                    },
+                    {
+                        path: '**',
+                        redirectTo: 'alert',
+                    },
+                ],
             },
             {
-                path: '**',
-                redirectTo: 'alert',
+                path: 'guides',
+                children: [
+                    {
+                        path: 'install',
+                        loadComponent: () => import('./pages/guides/install/install'),
+                    },
+                    {
+                        path: '**',
+                        redirectTo: 'install',
+                    },
+                ],
             },
-        ],
-    },
-    {
-        path: 'guides',
-        children: [
             {
-                path: 'install',
-                loadComponent: () => import('./pages/guides/install/install'),
-            },
-            {
-                path: '**',
-                redirectTo: 'install',
+                path: '',
+                pathMatch: 'full',
+                redirectTo: 'components/navigation-tree',
             },
         ],
     },
     {
         path: '**',
-        redirectTo: 'components/alert',
+        redirectTo: 'components/navigation-tree',
     },
 ];

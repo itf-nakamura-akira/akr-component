@@ -73,7 +73,7 @@
                                 "input": "projects/docs/public"
                             }
                         ],
-                        "styles": ["akr-component/styles.css", "projects/docs/src/styles.css"],
+                        "styles": ["./dist/lib/styles.css", "projects/docs/src/styles.css"],
                         "server": "projects/docs/src/main.server.ts",
                         "outputMode": "server",
                         "security": {

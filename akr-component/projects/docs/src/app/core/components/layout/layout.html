@@ -1,0 +1,32 @@
+<div class="layout-container" [class.menu-open]="isMenuOpen()">
+    <header>
+        <div class="header-content">
+            <button class="menu-toggle" (click)="isMenuOpen.set(!isMenuOpen())" aria-label="Toggle menu">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <a routerLink="/" class="logo">AKR Component</a>
+        </div>
+    </header>
+
+    @if (isMenuOpen()) {
+        <div class="backdrop" (click)="isMenuOpen.set(false)"></div>
+    }
+
+    <aside>
+        <akr-navigation-tree [nodes]="menuNode">
+            <ng-template akrNavigationTreeIcon let-node>
+                <span aria-hidden="true" class="material-symbols-outlined" translate="no" aria-hidden="true">
+                    {{ node.icon }}
+                </span>
+            </ng-template>
+        </akr-navigation-tree>
+    </aside>
+
+    <main>
+        <router-outlet />
+    </main>
+
+    <footer>
+        <p>&copy; 2024 AKR Component. Built with Angular.</p>
+    </footer>
+</div>

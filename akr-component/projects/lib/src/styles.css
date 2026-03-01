@@ -1,5 +1,6 @@
 :root {
     --akr-background: oklch(98.5% 0 0);
+    --akr-background-backdrop: color-mix(in oklch, var(--akr-background), #000 30%);
     --akr-foreground: oklch(21% 0.006 285.885);
     --akr-foreground-secondary: oklch(55.2% 0.016 285.938);
 
@@ -35,6 +36,7 @@
 
 body[data-theme='dark'] {
     --akr-background: oklch(14.1% 0.005 285.823);
+    --akr-background-backdrop: color-mix(in oklch, var(--akr-background), #fff 30%);
     --akr-foreground: oklch(98.5% 0 0);
     --akr-foreground-secondary: oklch(70.5% 0.015 286.067);
 

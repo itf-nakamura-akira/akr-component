@@ -1,0 +1,9 @@
+<section>
+    <akr-navigation-tree [nodes]="menuNode">
+        <ng-template akrNavigationTreeIcon let-node>
+            <span aria-hidden="true" class="material-symbols-outlined" translate="no" aria-hidden="true">
+                {{ node.icon }}
+            </span>
+        </ng-template>
+    </akr-navigation-tree>
+</section>
