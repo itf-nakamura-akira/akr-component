@@ -33,13 +33,13 @@ export class Layout {
             children: [
                 {
                     name: 'Alert',
-                    value: 'alert',
+                    value: 'components/alert',
                     icon: 'warning',
                     routerLink: '/components/alert',
                 },
                 {
                     name: 'Navigation Tree',
-                    value: 'navigation-tree',
+                    value: 'components/navigation-tree',
                     icon: 'account_tree',
                     routerLink: '/components/navigation-tree',
                 },

@@ -1,18 +1,19 @@
-<ul ngTree #tree="ngTree" [nav]="true" [(values)]="selected" class="basic-tree">
+<ul ngTree #tree="ngTree" class="basic-tree" [nav]="true" [(values)]="selected">
     <ng-template [ngTemplateOutlet]="treeNodes" [ngTemplateOutletContext]="{ nodes: nodes(), parent: tree }" />
 </ul>
 <ng-template #treeNodes let-nodes="nodes" let-parent="parent">
     @for (node of nodes; track node.value) {
         <a
             ngTreeItem
+            #treeItem="ngTreeItem"
             [parent]="parent"
             [value]="node.value"
             [label]="node.name"
             [disabled]="node.disabled"
             [selectable]="!node.children"
             [(expanded)]="node.expanded"
-            #treeItem="ngTreeItem"
             [routerLink]="node.routerLink"
+            (click)="!node.children && !node.disabled && select.emit(node)"
         >
             @if (node.icon && customIcon(); as customIcon) {
                 <ng-template [ngTemplateOutlet]="customIcon.template" [ngTemplateOutletContext]="{ $implicit: node }" />
@@ -27,7 +28,7 @@
         </a>
         @if (node.children) {
             <ul role="group">
-                <ng-template ngTreeItemGroup [ownedBy]="treeItem" #group="ngTreeItemGroup">
+                <ng-template ngTreeItemGroup #group="ngTreeItemGroup" [ownedBy]="treeItem">
                     <ng-template
                         [ngTemplateOutlet]="treeNodes"
                         [ngTemplateOutletContext]="{ nodes: node.children, parent: group }"
