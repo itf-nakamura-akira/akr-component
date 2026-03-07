@@ -15,7 +15,15 @@ module.exports = config.defineConfig(
         ],
         ignores: ['src/**/*.spec.ts'],
         processor: angular.processInlineTemplates,
-        rules: {},
+        rules: {
+            curly: 'error',
+            'padding-line-between-statements': [
+                'error',
+                { blankLine: 'always', prev: '*', next: 'block-like' },
+                { blankLine: 'always', prev: 'block-like', next: '*' },
+            ],
+            'arrow-body-style': ['error', 'as-needed'],
+        },
     },
     {
         files: ['**/*.html'],

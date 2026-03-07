@@ -70,6 +70,7 @@ describe('AkrAlert', () => {
             'warning',
             'error',
         ];
+
         for (const sev of severities) {
             fixture.componentRef.setInput('severity', sev);
             fixture.detectChanges();

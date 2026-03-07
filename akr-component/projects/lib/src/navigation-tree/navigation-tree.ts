@@ -92,35 +92,9 @@ export class AkrNavigationTree {
      * Flattened nodes with their isActive signals.
      */
     private readonly nodeStatusList = computed<{ node: TreeNode; active: () => boolean }[]>(() => {
-        const nodes = this.nodes() ?? [];
-        const flatList: { node: TreeNode; active: () => boolean }[] = [];
-        const traverse = (items: TreeNode[]) => {
-            for (const item of items) {
-                if (item.routerLink) {
-                    // Create the signal-based isActive check for this link
-                    const activeSignal = isActive(
-                        this.router.createUrlTree(Array.isArray(item.routerLink) ? item.routerLink : [item.routerLink]),
-                        this.router,
-                        {
-                            paths: 'exact',
-                            queryParams: 'ignored',
-                            fragment: 'ignored',
-                            matrixParams: 'ignored',
-                        },
-                    );
+        const nodes: TreeNode[] = this.nodes() ?? [];
 
-                    flatList.push({ node: item, active: activeSignal });
-                }
-
-                if (item.children) {
-                    traverse(item.children);
-                }
-            }
-        };
-
-        traverse(nodes);
-
-        return flatList;
+        return this.flattenNodes(nodes);
     });
 
     /**
@@ -308,5 +282,49 @@ export class AkrNavigationTree {
         }
 
         return undefined;
+    }
+
+    /**
+     * Flattens the tree nodes and creates isActive signals for each node with a routerLink.
+     *
+     * @param nodes The list of tree nodes.
+     * @returns A flat list of nodes and their active signals.
+     */
+    private flattenNodes(nodes: TreeNode[]): { node: TreeNode; active: () => boolean }[] {
+        const flatList: { node: TreeNode; active: () => boolean }[] = [];
+
+        this.traverseAndCollect(nodes, flatList);
+
+        return flatList;
+    }
+
+    /**
+     * Recursively traverses nodes and adds nodes with routerLinks to the list.
+     *
+     * @param items The tree nodes to traverse.
+     * @param list The list to collect flattened nodes into.
+     */
+    private traverseAndCollect(items: TreeNode[], list: { node: TreeNode; active: () => boolean }[]): void {
+        for (const item of items) {
+            if (item.routerLink) {
+                // Create the signal-based isActive check for this link
+                const activeSignal = isActive(
+                    this.router.createUrlTree(Array.isArray(item.routerLink) ? item.routerLink : [item.routerLink]),
+                    this.router,
+                    {
+                        paths: 'exact',
+                        queryParams: 'ignored',
+                        fragment: 'ignored',
+                        matrixParams: 'ignored',
+                    },
+                );
+
+                list.push({ node: item, active: activeSignal });
+            }
+
+            if (item.children) {
+                this.traverseAndCollect(item.children, list);
+            }
+        }
     }
 }
