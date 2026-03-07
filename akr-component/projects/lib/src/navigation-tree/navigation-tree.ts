@@ -14,7 +14,7 @@ import {
     TemplateRef,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
 import { AkrIcon } from '../internal/icon/icon';
 
@@ -22,12 +22,39 @@ import { AkrIcon } from '../internal/icon/icon';
  * Interface for a tree node.
  */
 export interface TreeNode {
+    /**
+     * The display name of the node.
+     */
     name: string;
+
+    /**
+     *  The unique value identifier for the node.
+     */
     value: string;
+
+    /**
+     * Optional icon name for the node.
+     */
     icon?: string;
+
+    /**
+     * Optional child nodes for nested structure.
+     */
     children?: TreeNode[];
+
+    /**
+     * Whether the node is disabled.
+     */
     disabled?: boolean;
+
+    /**
+     * Whether the node is expanded (for parent nodes).
+     */
     expanded?: boolean;
+
+    /**
+     * The route to navigate to when the node is clicked.
+     */
     routerLink?: string | any[];
 }
 
@@ -51,7 +78,7 @@ export class AkrNavigationTreeIcon {
  */
 @Component({
     selector: 'akr-navigation-tree',
-    imports: [Tree, TreeItem, TreeItemGroup, NgTemplateOutlet, AkrIcon, RouterLink],
+    imports: [Tree, TreeItem, TreeItemGroup, NgTemplateOutlet, AkrIcon, RouterLink, RouterLinkActive],
     templateUrl: './navigation-tree.html',
     styleUrl: './navigation-tree.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -133,14 +160,7 @@ export class AkrNavigationTree {
                     Array.isArray(node.routerLink) ? node.routerLink : [node.routerLink],
                 );
 
-                if (
-                    this.router.isActive(urlTree, {
-                        paths: 'exact',
-                        queryParams: 'ignored',
-                        fragment: 'ignored',
-                        matrixParams: 'ignored',
-                    })
-                ) {
+                if (this.router.serializeUrl(urlTree) === this.router.url) {
                     this.selected.set([node.value]);
 
                     return true;

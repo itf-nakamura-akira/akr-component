@@ -13,6 +13,8 @@
             [selectable]="!node.children"
             [(expanded)]="node.expanded"
             [routerLink]="node.routerLink"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
             (click)="!node.children && !node.disabled && select.emit(node)"
         >
             @if (node.icon && customIcon(); as customIcon) {

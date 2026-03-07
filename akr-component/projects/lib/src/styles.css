@@ -30,8 +30,14 @@
     --akr-danger-active: color-mix(in hsl, var(--akr-danger), #000 5%);
     --akr-danger-foreground: oklch(57.7% 0.245 27.325);
 
-    --akr-card: #fff;
     --akr-border: color-mix(in hsl, var(--akr-primary), #fff 20%);
+
+    /* Components */
+    --akr-card-background: #fff;
+    --akr-navigation-tree-background-hover: var(--akr-secondary-hover);
+    --akr-navigation-tree-foreground: var(--akr-foreground);
+    --akr-navigation-tree-parent-foreground: var(--akr-foreground-secondary);
+    --akr-navigation-tree-outline: var(--akr-primary);
 }
 
 body[data-theme='dark'] {
@@ -66,8 +72,14 @@ body[data-theme='dark'] {
     --akr-danger-active: color-mix(in hsl, var(--akr-danger), #fff 5%);
     --akr-danger-foreground: oklch(80.8% 0.114 19.571);
 
-    --akr-card: oklch(21% 0.006 285.885);
     --akr-border: color-mix(in hsl, var(--akr-primary), oklch(27.4% 0.006 286.033) 20%);
+
+    /* Components */
+    --akr-card-background: #000;
+    --akr-navigation-tree-background-hover: var(--akr-secondary-hover);
+    --akr-navigation-tree-foreground: var(--akr-foreground);
+    --akr-navigation-tree-parent-foreground: var(--akr-foreground-secondary);
+    --akr-navigation-tree-outline: var(--akr-primary);
 }
 
 body {
