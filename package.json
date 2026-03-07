@@ -2,9 +2,6 @@
     "name": "akr-component",
     "private": true,
     "type": "module",
-    "workspaces": [
-        "packages/*"
-    ],
     "scripts": {
         "format": "prettier . --write --cache --cache-strategy metadata",
         "commit": "gemini --yolo -p \"Commit the staged source code.\""
