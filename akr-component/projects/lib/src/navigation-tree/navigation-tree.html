@@ -22,7 +22,16 @@
             }
             {{ node.name }}
             <span class="spacer"></span>
-            <span aria-hidden="true" class="material-symbols-outlined expand-icon" translate="no">
+            <span
+                aria-hidden="true"
+                class="material-symbols-outlined expand-icon"
+                translate="no"
+                (click)="
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    toggleExpanded(node, !expandedValues().has(node.value))
+                "
+            >
                 @if (node.children) {
                     <akr-icon name="keyboard_arrow_right"></akr-icon>
                 }

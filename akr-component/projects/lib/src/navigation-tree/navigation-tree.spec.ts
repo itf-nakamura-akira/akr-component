@@ -153,4 +153,31 @@ describe('AkrNavigationTree', () => {
         const parent1Element = findItemByName('Parent 1');
         expect(parent1Element?.nativeElement.getAttribute('aria-expanded')).toBe('true');
     });
+
+    it('should toggle expansion when clicking the expand icon and not navigate', async () => {
+        const initialUrl = router.url;
+        const parent1 = findItemByName('Parent 1');
+        const expandIcon = parent1?.query(By.css('.expand-icon'));
+
+        expect(parent1?.nativeElement.getAttribute('aria-expanded')).toBe('false');
+
+        // Click the expand icon
+        expandIcon?.nativeElement.click();
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        // Should be expanded
+        expect(parent1?.nativeElement.getAttribute('aria-expanded')).toBe('true');
+        // URL should not have changed
+        expect(router.url).toBe(initialUrl);
+
+        // Click again to collapse
+        expandIcon?.nativeElement.click();
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        // Should be collapsed
+        expect(parent1?.nativeElement.getAttribute('aria-expanded')).toBe('false');
+        expect(router.url).toBe(initialUrl);
+    });
 });

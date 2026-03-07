@@ -34,9 +34,11 @@
             cursor: default;
         }
 
-        &:focus,
-        &:hover {
-            background-color: var(--akr-navigation-tree-background-hover);
+        &:not(:has(.expand-icon akr-icon)) {
+            &:focus,
+            &:hover {
+                background-color: var(--akr-navigation-tree-background-hover);
+            }
         }
 
         &:focus {
