@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NavigationTree } from './navigation-tree';
+import NavigationTree from './navigation-tree';
 
 describe('NavigationTree', () => {
     let component: NavigationTree;

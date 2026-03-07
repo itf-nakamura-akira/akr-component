@@ -15,7 +15,7 @@
             [routerLink]="node.routerLink"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
-            (click)="!node.children && !node.disabled && select.emit(node)"
+            (click)="!node.children && !node.disabled && selectionChange.emit(node)"
         >
             @if (node.icon && customIcon(); as customIcon) {
                 <ng-template [ngTemplateOutlet]="customIcon.template" [ngTemplateOutletContext]="{ $implicit: node }" />

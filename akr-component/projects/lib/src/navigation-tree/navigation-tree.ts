@@ -55,7 +55,7 @@ export interface TreeNode {
     /**
      * The route to navigate to when the node is clicked.
      */
-    routerLink?: string | any[];
+    routerLink?: string | unknown[];
 }
 
 /**
@@ -102,7 +102,7 @@ export class AkrNavigationTree {
     /**
      * Event emitted when a node is selected.
      */
-    readonly select = output<TreeNode>();
+    readonly selectionChange = output<TreeNode>();
 
     /**
      * The selected node value.

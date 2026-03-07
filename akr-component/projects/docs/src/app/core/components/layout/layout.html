@@ -9,7 +9,15 @@
     </header>
 
     @if (isMenuOpen()) {
-        <div class="backdrop" (click)="isMenuOpen.set(false)"></div>
+        <div
+            class="backdrop"
+            (click)="isMenuOpen.set(false)"
+            (keydown.enter)="isMenuOpen.set(false)"
+            (keydown.space)="isMenuOpen.set(false)"
+            role="button"
+            tabindex="0"
+            aria-label="Close menu"
+        ></div>
     }
 
     <aside>
