@@ -11,11 +11,11 @@
             [label]="node.name"
             [disabled]="node.disabled"
             [selectable]="!node.children"
-            [(expanded)]="node.expanded"
-            [routerLink]="node.routerLink"
+            [expanded]="expandedValues().has(node.value)"
+            (expandedChange)="toggleExpanded(node, $event)"
+            [routerLink]="!node.disabled ? node.routerLink : null"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
-            (click)="!node.children && !node.disabled && selectionChange.emit(node)"
         >
             @if (node.icon && customIcon(); as customIcon) {
                 <ng-template [ngTemplateOutlet]="customIcon.template" [ngTemplateOutletContext]="{ $implicit: node }" />

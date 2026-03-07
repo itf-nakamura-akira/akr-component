@@ -3,19 +3,18 @@ import { NgTemplateOutlet } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
+    computed,
     contentChild,
-    DestroyRef,
     Directive,
     effect,
     inject,
     input,
     output,
+    Signal,
     signal,
     TemplateRef,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { filter } from 'rxjs';
+import { isActive, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AkrIcon } from '../internal/icon/icon';
 
 /**
@@ -90,9 +89,57 @@ export class AkrNavigationTree {
     private readonly router = inject(Router);
 
     /**
-     * DestroyRef
+     * Flattened nodes with their isActive signals.
      */
-    private readonly destroyRef = inject(DestroyRef);
+    private readonly nodeStatusList = computed<{ node: TreeNode; active: () => boolean }[]>(() => {
+        const nodes = this.nodes() ?? [];
+        const flatList: { node: TreeNode; active: () => boolean }[] = [];
+        const traverse = (items: TreeNode[]) => {
+            for (const item of items) {
+                if (item.routerLink) {
+                    // Create the signal-based isActive check for this link
+                    const activeSignal = isActive(
+                        this.router.createUrlTree(Array.isArray(item.routerLink) ? item.routerLink : [item.routerLink]),
+                        this.router,
+                        {
+                            paths: 'exact',
+                            queryParams: 'ignored',
+                            fragment: 'ignored',
+                            matrixParams: 'ignored',
+                        },
+                    );
+
+                    flatList.push({ node: item, active: activeSignal });
+                }
+
+                if (item.children) {
+                    traverse(item.children);
+                }
+            }
+        };
+
+        traverse(nodes);
+
+        return flatList;
+    });
+
+    /**
+     * The currently active node in the tree based on the router URL.
+     */
+    private readonly activeNode = computed(() => this.nodeStatusList().find((status) => status.active())?.node);
+
+    /**
+     * The currently selected node object.
+     */
+    private readonly selectedNode = computed(() => {
+        const selected: string[] = this.selected();
+
+        if (selected.length === 0) {
+            return undefined;
+        }
+
+        return this.findNodeByValue(this.nodes() ?? [], selected[0]);
+    });
 
     /**
      * The list of tree nodes to display.
@@ -110,71 +157,156 @@ export class AkrNavigationTree {
     readonly selected = signal<string[]>([]);
 
     /**
+     * The values of expanded nodes.
+     */
+    readonly expandedValues = signal<Set<string>>(new Set());
+
+    /**
      * Custom icon template provided via content projection.
      */
-    readonly customIcon = contentChild(AkrNavigationTreeIcon);
+    readonly customIcon: Signal<AkrNavigationTreeIcon | undefined> = contentChild(AkrNavigationTreeIcon);
 
     /**
      * Constructor
      */
     constructor() {
-        // Update selection state when route changes.
-        this.router.events
-            .pipe(
-                filter((e) => e instanceof NavigationEnd),
-                takeUntilDestroyed(this.destroyRef),
-            )
-            .subscribe(() => this.syncSelectionWithRoute());
-
-        // Also runs when the node is loaded.
+        // Initialize expanded values from input nodes.
         effect(() => {
-            if (this.nodes()) {
-                this.syncSelectionWithRoute();
+            const nodes: TreeNode[] | undefined = this.nodes();
+
+            if (nodes) {
+                this.initializeExpandedValues(nodes);
+            }
+        });
+
+        // Automatically sync selection and expansion when active node changes.
+        effect(() => {
+            const active: TreeNode | undefined = this.activeNode();
+
+            if (active) {
+                this.selected.set([active.value]);
+                this.expandAncestors(this.nodes() ?? [], active.value);
+            }
+        });
+
+        // Notify selection change.
+        effect(() => {
+            const node: TreeNode | undefined = this.selectedNode();
+
+            if (node) {
+                this.selectionChange.emit(node);
             }
         });
     }
 
     /**
-     * Synchronizes the tree selection with the current router state.
+     * Toggles the expansion state of a node.
+     *
+     * @param node The node to toggle.
+     * @param expanded Whether the node should be expanded.
      */
-    private syncSelectionWithRoute(): void {
-        const nodes = this.nodes();
+    toggleExpanded(node: TreeNode, expanded: boolean): void {
+        this.expandedValues.update((values) => {
+            const next = new Set<string>(values);
 
-        if (!nodes) {
-            return;
-        }
+            if (expanded) {
+                next.add(node.value);
+            } else {
+                next.delete(node.value);
+            }
 
-        this.findAndSelectActiveNode(nodes);
+            return next;
+        });
     }
 
     /**
-     * Recursively finds the active node based on the current router state and updates selection.
+     * Initializes expanded values from the nodes input.
      *
-     * @param nodes The list of tree nodes to search.
-     * @returns True if an active node was found and selected, false otherwise.
+     * @param nodes The list of tree nodes.
      */
-    private findAndSelectActiveNode(nodes: TreeNode[]): boolean {
+    private initializeExpandedValues(nodes: TreeNode[]): void {
+        this.expandedValues.update((values) => {
+            const next = new Set<string>(values);
+
+            this.collectExpandedValues(nodes, next);
+
+            return next;
+        });
+    }
+
+    /**
+     * Recursively collects values of nodes that should be expanded initially.
+     *
+     * @param nodes The list of tree nodes.
+     * @param expanded The set to add expanded values to.
+     */
+    private collectExpandedValues(nodes: TreeNode[], expanded: Set<string>): void {
         for (const node of nodes) {
-            if (node.routerLink) {
-                const urlTree = this.router.createUrlTree(
-                    Array.isArray(node.routerLink) ? node.routerLink : [node.routerLink],
-                );
-
-                if (this.router.serializeUrl(urlTree) === this.router.url) {
-                    this.selected.set([node.value]);
-
-                    return true;
-                }
+            if (node.expanded) {
+                expanded.add(node.value);
             }
 
-            // Expand parent if child is active.
-            if (node.children && this.findAndSelectActiveNode(node.children)) {
-                node.expanded = true;
+            if (node.children) {
+                this.collectExpandedValues(node.children, expanded);
+            }
+        }
+    }
+
+    /**
+     * Expands all parent nodes of the given node value.
+     *
+     * @param nodes The tree nodes to search.
+     * @param targetValue The value of the node whose ancestors should be expanded.
+     * @returns True if the target node was found in this branch, false otherwise.
+     */
+    private expandAncestors(nodes: TreeNode[], targetValue: string): boolean {
+        for (const node of nodes) {
+            if (node.value === targetValue) {
+                return true;
+            }
+
+            if (node.children && this.expandAncestors(node.children, targetValue)) {
+                this.expandedValues.update((values) => {
+                    if (values.has(node.value)) {
+                        return values;
+                    }
+
+                    const next = new Set<string>(values);
+
+                    next.add(node.value);
+
+                    return next;
+                });
 
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Finds a node by its value in the tree.
+     *
+     * @param nodes The nodes to search.
+     * @param value The value to look for.
+     * @returns The found node or undefined.
+     */
+    private findNodeByValue(nodes: TreeNode[], value: string): TreeNode | undefined {
+        for (const node of nodes) {
+            if (node.value === value) {
+                return node;
+            }
+
+            if (node.children) {
+                const found = this.findNodeByValue(node.children, value);
+
+                if (found) {
+                    return found;
+                }
+            }
+        }
+
+        return undefined;
     }
 }

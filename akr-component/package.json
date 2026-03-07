@@ -7,8 +7,8 @@
         "start:docs": "ng serve docs --host 0.0.0.0",
         "lint:lib": "ng lint lib",
         "lint:docs": "ng lint docs",
-        "test:lib": "ng test lib",
-        "test:docs": "ng test docs",
+        "test:lib": "ng test lib --no-watch",
+        "test:docs": "ng test docs --no-watch",
         "build:lib": "ng build lib",
         "build:docs": "ng build docs",
         "serve:ssr:docs": "node dist/docs/server/server.mjs"
