@@ -21,7 +21,6 @@ export class Layout {
                 {
                     name: 'Install',
                     value: 'guides/install',
-                    icon: 'download',
                     routerLink: '/guides/install',
                 },
             ],
@@ -34,13 +33,16 @@ export class Layout {
                 {
                     name: 'Alert',
                     value: 'components/alert',
-                    icon: 'warning',
                     routerLink: '/components/alert',
+                },
+                {
+                    name: 'Input',
+                    value: 'components/input',
+                    routerLink: '/components/input',
                 },
                 {
                     name: 'Navigation Tree',
                     value: 'components/navigation-tree',
-                    icon: 'account_tree',
                     routerLink: '/components/navigation-tree',
                 },
             ],

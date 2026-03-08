@@ -18,6 +18,10 @@ export const routes: Routes = [
                         loadComponent: () => import('./pages/components/navigation-tree/navigation-tree'),
                     },
                     {
+                        path: 'input',
+                        loadComponent: () => import('./pages/components/input/input'),
+                    },
+                    {
                         path: '**',
                         redirectTo: 'alert',
                     },
