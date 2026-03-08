@@ -1,25 +1,58 @@
-<div class="flex flex-col gap-6 w-64">
-    <akr-form-field label="Default Input">
-        <input akr-input />
-    </akr-form-field>
+<div class="flex flex-col gap-8 w-80">
+    <section class="flex flex-col gap-4">
+        <h2 class="text-lg font-bold">Basic Usage</h2>
+        <akr-form-field label="Username">
+            <input akr-input placeholder="Enter your username" />
+        </akr-form-field>
 
-    <akr-form-field label="Input with Hint">
-        <input akr-input placeholder="Enter your username" hintMessage="Username must be at least 3 characters." />
-    </akr-form-field>
+        <akr-form-field label="Password">
+            <input akr-input type="password" placeholder="Enter your password" />
+        </akr-form-field>
 
-    <akr-form-field label="Input with Value">
-        <input akr-input value="sample message" />
-    </akr-form-field>
+        <akr-form-field label="Age">
+            <input akr-input type="number" placeholder="0" />
+        </akr-form-field>
+    </section>
 
-    <akr-form-field label="Readonly Input">
-        <input akr-input value="this form field is readonly" readonly />
-    </akr-form-field>
+    <section class="flex flex-col gap-4">
+        <h2 class="text-lg font-bold">Validation & Hints</h2>
+        <akr-form-field label="Email" [required]="true">
+            <input akr-input type="email" placeholder="example@mail.com" hintMessage="We'll never share your email." />
+        </akr-form-field>
 
-    <akr-form-field label="Disabled Input">
-        <input akr-input value="this form field is disabled" disabled />
-    </akr-form-field>
+        <akr-form-field label="Required field" [required]="true">
+            <input akr-input value="invalid input" [invalid]="true" errorMessage="This field is required" />
+        </akr-form-field>
 
-    <akr-form-field label="Invalid Input">
-        <input akr-input [invalid]="true" errorMessage="This field is required." />
-    </akr-form-field>
+        <akr-form-field label="Priority Check">
+            <input
+                akr-input
+                value="has error"
+                [invalid]="true"
+                errorMessage="Error has higher priority than hint"
+                hintMessage="This hint will be hidden"
+            />
+        </akr-form-field>
+    </section>
+
+    <section class="flex flex-col gap-4">
+        <h2 class="text-lg font-bold">States</h2>
+        <akr-form-field label="Readonly">
+            <input akr-input value="you can't edit this" readonly />
+        </akr-form-field>
+
+        <akr-form-field label="Disabled">
+            <input akr-input value="this is disabled" disabled />
+        </akr-form-field>
+    </section>
+
+    <section class="flex flex-col gap-4">
+        <h2 class="text-lg font-bold">Standalone Input</h2>
+        <input akr-input placeholder="Input without form field" />
+    </section>
+
+    <section class="flex flex-col gap-4">
+        <h2 class="text-lg font-bold">Customization</h2>
+        <app-input-custom-required />
+    </section>
 </div>

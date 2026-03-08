@@ -1,6 +1,11 @@
 <div class="form-field">
     @if (label()) {
-        <label class="form-field-label">{{ label() }}</label>
+        <label class="form-field-label">
+            {{ label() }}
+            @if (required()) {
+                <span class="form-field-required-mark" aria-hidden="true">{{ requiredMark }}</span>
+            }
+        </label>
     }
     <div class="form-field-control">
         <ng-content />
