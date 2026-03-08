@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AkrInput } from 'akr-component';
+import { AkrFormField, AkrInput } from 'akr-component';
 
 @Component({
     selector: 'app-input',
-    imports: [AkrInput],
+    imports: [AkrInput, AkrFormField],
     templateUrl: './input.html',
     styleUrl: './input.css',
     changeDetection: ChangeDetectionStrategy.OnPush,

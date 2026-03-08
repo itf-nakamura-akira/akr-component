@@ -1,0 +1,34 @@
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.form-field-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--akr-foreground);
+    transition: color 0.2s;
+}
+
+:host(.akr-form-field-invalid) .form-field-label {
+    color: var(--akr-danger-foreground);
+}
+
+.form-field-control {
+    position: relative;
+}
+
+.form-field-error {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--akr-danger-foreground);
+    margin-top: 0.125rem;
+}
+
+.form-field-hint {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--akr-foreground-secondary);
+    margin-top: 0.125rem;
+}

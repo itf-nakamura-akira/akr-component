@@ -1,0 +1,46 @@
+:host {
+    display: block;
+    width: 100%;
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--akr-foreground);
+    background-color: var(--akr-background);
+    border: 1px solid var(--akr-border);
+    border-radius: 0.5rem;
+    outline: none;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        background-color 0.2s;
+
+    &::placeholder {
+        color: var(--akr-foreground-secondary);
+    }
+
+    &:focus {
+        border-color: var(--akr-primary-foreground);
+        box-shadow: 0 0 0 2px var(--akr-primary);
+    }
+
+    &:disabled {
+        background-color: var(--akr-secondary);
+        color: var(--akr-foreground-secondary);
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    &[readonly] {
+        background-color: var(--akr-secondary);
+        cursor: default;
+    }
+
+    &.akr-input-invalid {
+        border-color: var(--akr-danger-foreground);
+
+        &:focus {
+            box-shadow: 0 0 0 2px var(--akr-danger);
+        }
+    }
+}

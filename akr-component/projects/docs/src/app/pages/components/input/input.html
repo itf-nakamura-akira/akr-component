@@ -1,8 +1,25 @@
-<div class="flex flex-col gap-2 w-64">
-    <input akr-input />
-    <input akr-input value="sample message" />
-    <input akr-input placeholder="placeholder..." />
-    <input akr-input value="this form field is required" required />
-    <input akr-input value="this form field is readonly" readonly />
-    <input akr-input value="this form field is disabled" disabled />
+<div class="flex flex-col gap-6 w-64">
+    <akr-form-field label="Default Input">
+        <input akr-input />
+    </akr-form-field>
+
+    <akr-form-field label="Input with Hint">
+        <input akr-input placeholder="Enter your username" hintMessage="Username must be at least 3 characters." />
+    </akr-form-field>
+
+    <akr-form-field label="Input with Value">
+        <input akr-input value="sample message" />
+    </akr-form-field>
+
+    <akr-form-field label="Readonly Input">
+        <input akr-input value="this form field is readonly" readonly />
+    </akr-form-field>
+
+    <akr-form-field label="Disabled Input">
+        <input akr-input value="this form field is disabled" disabled />
+    </akr-form-field>
+
+    <akr-form-field label="Invalid Input">
+        <input akr-input [invalid]="true" errorMessage="This field is required." />
+    </akr-form-field>
 </div>

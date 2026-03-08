@@ -1,0 +1,17 @@
+<div class="form-field">
+    @if (label()) {
+        <label class="form-field-label">{{ label() }}</label>
+    }
+    <div class="form-field-control">
+        <ng-content />
+    </div>
+    @if (input().invalid() && input().errorMessage()) {
+        <div class="form-field-error">
+            {{ input().errorMessage() }}
+        </div>
+    } @else if (input().hintMessage()) {
+        <div class="form-field-hint">
+            {{ input().hintMessage() }}
+        </div>
+    }
+</div>
