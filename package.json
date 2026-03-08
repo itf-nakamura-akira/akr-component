@@ -3,6 +3,7 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "gemini": "gemini",
         "format": "prettier . --write --cache --cache-strategy metadata",
         "commit": "gemini --yolo -p \"Commit the staged source code.\""
     },

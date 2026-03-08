@@ -1,29 +1,46 @@
-<akr-alert severity="info">Sample message.</akr-alert>
-<akr-alert severity="success">Sample message.</akr-alert>
-<akr-alert severity="warning">Sample message.</akr-alert>
-<akr-alert severity="error">Sample message.</akr-alert>
+<div class="flex flex-col gap-8 w-120">
+    <section class="flex flex-col gap-4">
+        <h2 class="text-lg font-bold">Basic Usage</h2>
+        <akr-alert severity="info">This is an info alert.</akr-alert>
+        <akr-alert severity="success">This is a success alert.</akr-alert>
+        <akr-alert severity="warning">This is a warning alert.</akr-alert>
+        <akr-alert severity="error">This is an error alert.</akr-alert>
+    </section>
 
-<akr-alert severity="info" [showIcon]="false">Sample message.</akr-alert>
-<akr-alert severity="success" [showIcon]="false">Sample message.</akr-alert>
-<akr-alert severity="warning" [showIcon]="false">Sample message.</akr-alert>
-<akr-alert severity="error" [showIcon]="false">Sample message.</akr-alert>
+    <section class="flex flex-col gap-4">
+        <h2 class="text-lg font-bold">Icons</h2>
+        <akr-alert severity="info" [showIcon]="false">No icon alert.</akr-alert>
+        <akr-alert severity="info">Default icon alert.</akr-alert>
+    </section>
 
-@if (showInfoAlert()) {
-    <akr-alert severity="info" [closable]="true" (closeAlert)="showInfoAlert.set(false)"> Sample message. </akr-alert>
-}
-
-@if (showSuccessAlert()) {
-    <akr-alert severity="success" [closable]="true" (closeAlert)="showSuccessAlert.set(false)">
-        Sample message.
-    </akr-alert>
-}
-
-@if (showWarningAlert()) {
-    <akr-alert severity="warning" [closable]="true" (closeAlert)="showWarningAlert.set(false)">
-        Sample message.
-    </akr-alert>
-}
-
-@if (showErrorAlert()) {
-    <akr-alert severity="error" [closable]="true" (closeAlert)="showErrorAlert.set(false)"> Sample message. </akr-alert>
-}
+    <section class="flex flex-col gap-4">
+        <h2 class="text-lg font-bold">Closable</h2>
+        @if (showInfoAlert()) {
+            <akr-alert severity="info" [closable]="true" (closeAlert)="showInfoAlert.set(false)">
+                This alert can be dismissed.
+            </akr-alert>
+        }
+        @if (showSuccessAlert()) {
+            <akr-alert severity="success" [closable]="true" (closeAlert)="showSuccessAlert.set(false)">
+                You successfully saved your changes!
+            </akr-alert>
+        }
+        @if (showWarningAlert()) {
+            <akr-alert severity="warning" [closable]="true" (closeAlert)="showWarningAlert.set(false)">
+                Please check your configuration.
+            </akr-alert>
+        }
+        @if (showErrorAlert()) {
+            <akr-alert severity="error" [closable]="true" (closeAlert)="showErrorAlert.set(false)">
+                Something went wrong. Please try again.
+            </akr-alert>
+        }
+        <button
+            type="button"
+            (click)="resetAlerts()"
+            class="self-start px-3 py-1 text-sm bg-gray-100 rounded border hover:bg-gray-200 transition-colors"
+        >
+            Reset Alerts
+        </button>
+    </section>
+</div>

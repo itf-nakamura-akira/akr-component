@@ -16,4 +16,11 @@ export default class Alert {
     readonly showWarningAlert = signal<boolean>(true);
 
     readonly showErrorAlert = signal<boolean>(true);
+
+    resetAlerts() {
+        this.showInfoAlert.set(true);
+        this.showSuccessAlert.set(true);
+        this.showWarningAlert.set(true);
+        this.showErrorAlert.set(true);
+    }
 }
