@@ -66,6 +66,13 @@ export class RadioButton<T = unknown> {
     readonly disabled = input<boolean>(false);
 
     /**
+     * The visual variant of the radio button.
+     * - 'default': Standard radio button with circle and label.
+     * - 'card': Card-style radio button.
+     */
+    readonly variant = input<'default' | 'card'>('default');
+
+    /**
      * Handle click on the host component.
      * Selects the radio button if it's not disabled.
      */

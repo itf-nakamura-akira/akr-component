@@ -3,6 +3,7 @@
     [attr.data-severity]="severity()"
     [attr.data-checked]="checked()"
     [attr.data-disabled]="isDisabled()"
+    [attr.data-variant]="variant()"
 >
     <input
         type="radio"
@@ -17,6 +18,14 @@
         <div class="akr-radio-inner"></div>
     </div>
     <div class="akr-radio-label">
-        <ng-content />
+        <div class="akr-radio-title">
+            <ng-content select="[akr-radio-title]" />
+        </div>
+        <div class="akr-radio-description">
+            <ng-content select="[akr-radio-description]" />
+        </div>
+        <div class="akr-radio-content">
+            <ng-content />
+        </div>
     </div>
 </div>

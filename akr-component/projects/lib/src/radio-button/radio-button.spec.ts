@@ -14,6 +14,20 @@ class MockRadioButtonGroup {
     disabled = signal<boolean>(false);
 }
 
+@Component({
+    standalone: true,
+    imports: [RadioButton],
+    template: `
+        <akr-radio-button value="test">
+            <span akr-radio-title>Test Title</span>
+            <span akr-radio-description>Test Description</span>
+            Default Content
+        </akr-radio-button>
+    `,
+    providers: [{ provide: RadioButtonGroup, useClass: MockRadioButtonGroup }],
+})
+class TestHostComponent {}
+
 describe('RadioButton', () => {
     let component: RadioButton<string>;
     let fixture: ComponentFixture<RadioButton<string>>;
@@ -36,6 +50,13 @@ describe('RadioButton', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should apply variant attribute', () => {
+        fixture.componentRef.setInput('variant', 'card');
+        fixture.detectChanges();
+        const host = fixture.nativeElement.querySelector('.akr-radio-host');
+        expect(host.getAttribute('data-variant')).toBe('card');
     });
 
     it('should handle click and select value', () => {
@@ -72,5 +93,25 @@ describe('RadioButton', () => {
         fixture.nativeElement.click();
 
         expect(spy).not.toHaveBeenCalled();
+    });
+
+    describe('Content Projection', () => {
+        let hostFixture: ComponentFixture<TestHostComponent>;
+
+        beforeEach(async () => {
+            hostFixture = TestBed.createComponent(TestHostComponent);
+            hostFixture.detectChanges();
+            await hostFixture.whenStable();
+        });
+
+        it('should project title and description into correct slots', () => {
+            const title = hostFixture.nativeElement.querySelector('.akr-radio-title');
+            const description = hostFixture.nativeElement.querySelector('.akr-radio-description');
+            const content = hostFixture.nativeElement.querySelector('.akr-radio-content');
+
+            expect(title.textContent).toContain('Test Title');
+            expect(description.textContent).toContain('Test Description');
+            expect(content.textContent).toContain('Default Content');
+        });
     });
 });

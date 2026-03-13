@@ -35,6 +35,26 @@
         opacity: 0.5;
     }
 
+    &[data-variant='card'] {
+        display: flex;
+        box-sizing: border-box;
+        padding: 1rem;
+        border: 1px solid var(--akr-border, #e5e7eb);
+        border-radius: 0.75rem;
+        background-color: var(--akr-background, #fff);
+        transition: all 0.2s ease-in-out;
+
+        &:hover:not([data-disabled='true']) {
+            border-color: var(--akr-radio-color);
+            background-color: color-mix(in hsl, var(--akr-radio-color), transparent 95%);
+        }
+
+        &[data-checked='true'] {
+            border-color: var(--akr-radio-color);
+            box-shadow: 0 0 0 1px var(--akr-radio-color);
+        }
+    }
+
     .akr-radio-native {
         position: absolute;
         width: 1px;
@@ -95,5 +115,38 @@
         font-size: 0.875rem;
         font-weight: 500;
         color: var(--akr-foreground, #333);
+
+        .akr-radio-host[data-variant='card'] & {
+            display: flex;
+            flex-direction: column;
+            gap: 0.125rem;
+        }
+
+        .akr-radio-title {
+            display: block;
+            font-weight: 600;
+            color: var(--akr-foreground);
+            line-height: 1.25rem;
+
+            &:empty {
+                display: none;
+            }
+        }
+
+        .akr-radio-description {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--akr-foreground-secondary);
+            line-height: 1rem;
+
+            &:empty {
+                display: none;
+            }
+        }
+
+        .akr-radio-content:empty {
+            display: none;
+        }
     }
 }
