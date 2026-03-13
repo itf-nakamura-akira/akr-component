@@ -1,22 +1,49 @@
-import { ChangeDetectionStrategy, Component, computed, forwardRef, HostListener, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, forwardRef, inject, input } from '@angular/core';
 import { RadioButtonGroup } from './radio-button-group';
 
+/**
+ * Severity levels for the radio button.
+ */
 export type RadioButtonSeverity = 'info' | 'success' | 'warning' | 'error';
 
+/**
+ * Radio button component.
+ *
+ * Provides a radio button input that can be used independently or within an `akr-radio-button-group`.
+ */
 @Component({
     selector: 'akr-radio-button',
     templateUrl: './radio-button.html',
     styleUrl: './radio-button.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        '(click)': 'onClick()',
+    },
 })
 export class RadioButton {
     /**
      * Parent radio group.
      */
-    protected readonly group = inject(
+    private readonly group = inject(
         forwardRef(() => RadioButtonGroup),
         { optional: true },
     );
+
+    /**
+     * Name attribute for the radio button.
+     * Inherited from group if available.
+     */
+    protected readonly name = computed<string | null>(() => this.group?.name() ?? null);
+
+    /**
+     * Whether the radio button is checked.
+     * Synchronized with the group's value.
+     */
+    protected readonly checked = computed<boolean>(() => {
+        const groupValue = this.group?.value();
+
+        return groupValue !== undefined && groupValue === this.value();
+    });
 
     /**
      * Severity of the radio button.
@@ -29,22 +56,6 @@ export class RadioButton {
     readonly value = input.required<any>();
 
     /**
-     * Name attribute for the radio button.
-     * Inherited from group if available.
-     */
-    readonly name = computed(() => this.group?.name() ?? null);
-
-    /**
-     * Whether the radio button is checked.
-     * Synchronized with the group's value.
-     */
-    readonly checked = computed(() => {
-        const groupValue = this.group?.value();
-
-        return groupValue !== undefined && groupValue === this.value();
-    });
-
-    /**
      * Whether the radio button is disabled.
      */
     readonly disabled = input<boolean>(false);
@@ -52,26 +63,25 @@ export class RadioButton {
     /**
      * Handle click on the host component.
      */
-    @HostListener('click')
-    protected onClick() {
+    protected onClick(): void {
         if (!this.disabled()) {
             this.select();
         }
     }
 
     /**
-     * Select this radio button.
+     * Synchronize internal input state.
      */
-    select() {
-        if (this.group) {
-            this.group.value.set(this.value());
-        }
+    protected onInputChange(): void {
+        this.select();
     }
 
     /**
-     * Synchronize internal input state.
+     * Select this radio button by updating the group value.
      */
-    onInputChange() {
-        this.select();
+    private select(): void {
+        if (this.group) {
+            this.group.value.set(this.value());
+        }
     }
 }

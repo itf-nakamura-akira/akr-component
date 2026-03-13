@@ -1,18 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RadioButton } from './radio-button';
+import { RadioButtonGroup } from './radio-button-group';
 
 @Component({
     standalone: true,
-    imports: [RadioButton],
-    template: `
-        <input akr-radio-button type="radio" id="radio-match" />
-        <input akr-radio-button type="text" id="text-no-match" />
-        <input akr-radio-button id="no-type-no-match" />
-    `,
+    selector: 'akr-radio-button-group',
+    template: '<ng-content />',
 })
-class HostComponent {}
+class MockRadioButtonGroup {
+    value = signal<any>(undefined);
+    name = signal<string | null>(null);
+}
 
 describe('RadioButton', () => {
     let component: RadioButton;
@@ -20,11 +20,17 @@ describe('RadioButton', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [RadioButton, HostComponent],
+            imports: [RadioButton],
+            providers: [{ provide: RadioButtonGroup, useClass: MockRadioButtonGroup }],
         }).compileComponents();
 
         fixture = TestBed.createComponent(RadioButton);
         component = fixture.componentInstance;
+
+        // Provide required value input
+        fixture.componentRef.setInput('value', 'test-value');
+
+        fixture.detectChanges();
         await fixture.whenStable();
     });
 
@@ -32,31 +38,26 @@ describe('RadioButton', () => {
         expect(component).toBeTruthy();
     });
 
-    describe('Selector matching', () => {
-        let hostFixture: ComponentFixture<HostComponent>;
+    it('should handle click and select value', () => {
+        const group = TestBed.inject(RadioButtonGroup) as unknown as MockRadioButtonGroup;
+        const spy = vi.spyOn(group.value, 'set');
 
-        beforeEach(async () => {
-            hostFixture = TestBed.createComponent(HostComponent);
-            hostFixture.detectChanges();
-            await hostFixture.whenStable();
-        });
+        // Simulate click on host
+        fixture.nativeElement.click();
 
-        it('should match when type="radio" is present', () => {
-            const debugElement = hostFixture.debugElement.query(By.css('#radio-match'));
-            const instance = debugElement.injector.get(RadioButton, null);
-            expect(instance).toBeTruthy();
-        });
+        expect(spy).toHaveBeenCalledWith('test-value');
+    });
 
-        it('should not match when type="text" is present', () => {
-            const debugElement = hostFixture.debugElement.query(By.css('#text-no-match'));
-            const instance = debugElement.injector.get(RadioButton, null);
-            expect(instance).toBeNull();
-        });
+    it('should not select value when disabled', () => {
+        const group = TestBed.inject(RadioButtonGroup) as unknown as MockRadioButtonGroup;
+        const spy = vi.spyOn(group.value, 'set');
 
-        it('should not match when type is missing', () => {
-            const debugElement = hostFixture.debugElement.query(By.css('#no-type-no-match'));
-            const instance = debugElement.injector.get(RadioButton, null);
-            expect(instance).toBeNull();
-        });
+        fixture.componentRef.setInput('disabled', true);
+        fixture.detectChanges();
+
+        // Simulate click on host
+        fixture.nativeElement.click();
+
+        expect(spy).not.toHaveBeenCalled();
     });
 });
