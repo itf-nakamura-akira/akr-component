@@ -1,6 +1,5 @@
 import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { RadioButton } from './radio-button';
 import { RadioButtonGroup } from './radio-button-group';
 
@@ -10,13 +9,13 @@ import { RadioButtonGroup } from './radio-button-group';
     template: '<ng-content />',
 })
 class MockRadioButtonGroup {
-    value = signal<any>(undefined);
+    value = signal<string | undefined>(undefined);
     name = signal<string | null>(null);
 }
 
 describe('RadioButton', () => {
-    let component: RadioButton;
-    let fixture: ComponentFixture<RadioButton>;
+    let component: RadioButton<string>;
+    let fixture: ComponentFixture<RadioButton<string>>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
@@ -24,7 +23,7 @@ describe('RadioButton', () => {
             providers: [{ provide: RadioButtonGroup, useClass: MockRadioButtonGroup }],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(RadioButton);
+        fixture = TestBed.createComponent(RadioButton<string>);
         component = fixture.componentInstance;
 
         // Provide required value input

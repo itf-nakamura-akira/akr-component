@@ -73,7 +73,7 @@ export class AkrNavigationTreeIcon {
 /**
  * Navigation Tree Component.
  *
- * This component displays a hierarchical navigation tree.
+ * This component displays a hierarchical navigation tree with support for routing, selection, and expansion.
  */
 @Component({
     selector: 'akr-navigation-tree',
@@ -84,12 +84,13 @@ export class AkrNavigationTreeIcon {
 })
 export class AkrNavigationTree {
     /**
-     * Router
+     * Router instance for navigation and URL matching.
      */
     private readonly router = inject(Router);
 
     /**
-     * Flattened nodes with their isActive signals.
+     * Flattened nodes with their isActive signals used for router link status.
+     * This list is computed from the tree structure to allow efficient URL matching.
      */
     private readonly nodeStatusList = computed<{ node: TreeNode; active: () => boolean }[]>(() => {
         const nodes: TreeNode[] = this.nodes() ?? [];
@@ -103,7 +104,7 @@ export class AkrNavigationTree {
     private readonly activeNode = computed(() => this.nodeStatusList().find((status) => status.active())?.node);
 
     /**
-     * The currently selected node object.
+     * The currently selected node object, derived from the `selected` signal.
      */
     private readonly selectedNode = computed(() => {
         const selected: string[] = this.selected();
@@ -126,22 +127,22 @@ export class AkrNavigationTree {
     readonly selectionChange = output<TreeNode>();
 
     /**
-     * The selected node value.
+     * The currently selected node value as an array (for use with Aria Tree).
      */
     readonly selected = signal<string[]>([]);
 
     /**
-     * The values of expanded nodes.
+     * The values of currently expanded parent nodes.
      */
     readonly expandedValues = signal<Set<string>>(new Set());
 
     /**
-     * Custom icon template provided via content projection.
+     * Optional custom icon template provided via content projection.
      */
     readonly customIcon: Signal<AkrNavigationTreeIcon | undefined> = contentChild(AkrNavigationTreeIcon);
 
     /**
-     * Constructor
+     * Initializes side-effects to synchronize the tree state with the current URL and selection.
      */
     constructor() {
         // Initialize expanded values from input nodes.

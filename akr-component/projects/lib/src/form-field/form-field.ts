@@ -3,6 +3,7 @@ import { AkrInput } from '../input/input';
 
 /**
  * Injection token for the required mark content.
+ * Defaults to '*' but can be overridden globally via dependency injection.
  */
 export const AKR_FORM_FIELD_REQUIRED_MARK = new InjectionToken<string>('AKR_FORM_FIELD_REQUIRED_MARK', {
     providedIn: 'root',
@@ -12,7 +13,10 @@ export const AKR_FORM_FIELD_REQUIRED_MARK = new InjectionToken<string>('AKR_FORM
 /**
  * Form Field Component.
  *
- * This component wraps an input component and provides a label and error message display.
+ * This component wraps an `AkrInput` component and provides a structured layout with a label,
+ * error messages, and hint messages. It automatically handles the association between the label
+ * and the input for accessibility.
+ * It's designed to work with standard HTML input elements using the `akr-input` directive.
  */
 @Component({
     selector: 'akr-form-field',
@@ -26,22 +30,25 @@ export const AKR_FORM_FIELD_REQUIRED_MARK = new InjectionToken<string>('AKR_FORM
 })
 export class AkrFormField {
     /**
-     * The required mark content.
+     * The content of the required mark displayed next to the label when `required` is true.
      */
     protected readonly requiredMark = inject(AKR_FORM_FIELD_REQUIRED_MARK);
 
     /**
-     * The label for the form field.
+     * The label text for the form field.
+     * This label is automatically associated with the wrapped input via its ID.
      */
     readonly label = input<string>('');
 
     /**
-     * Whether the form field is required.
+     * Whether the form field is marked as required.
+     * If true, the required mark (e.g., "*") will be displayed.
      */
     readonly required = input<boolean>(false);
 
     /**
-     * The input component within the form field.
+     * The input component projected within the form field.
+     * This is identified by the `AkrInput` class.
      */
     readonly input = contentChild.required(AkrInput);
 }

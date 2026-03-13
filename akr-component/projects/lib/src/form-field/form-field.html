@@ -1,6 +1,6 @@
 <div class="form-field">
     @if (label()) {
-        <label class="form-field-label">
+        <label class="form-field-label" [attr.for]="input().id()">
             {{ label() }}
             @if (required()) {
                 <span class="form-field-required-mark" aria-hidden="true">{{ requiredMark }}</span>

@@ -20,12 +20,12 @@ export type RadioButtonSeverity = 'info' | 'success' | 'warning' | 'error';
         '(click)': 'onClick()',
     },
 })
-export class RadioButton {
+export class RadioButton<T = unknown> {
     /**
      * Parent radio group.
      */
     private readonly group = inject(
-        forwardRef(() => RadioButtonGroup),
+        forwardRef(() => RadioButtonGroup<T>),
         { optional: true },
     );
 
@@ -46,6 +46,11 @@ export class RadioButton {
     });
 
     /**
+     * Effective disabled state.
+     */
+    protected readonly isDisabled = computed<boolean>(() => this.disabled() || (this.group?.disabled() ?? false));
+
+    /**
      * Severity of the radio button.
      */
     readonly severity = input<RadioButtonSeverity>();
@@ -53,7 +58,7 @@ export class RadioButton {
     /**
      * Value of the radio button.
      */
-    readonly value = input.required<any>();
+    readonly value = input.required<T>();
 
     /**
      * Whether the radio button is disabled.
@@ -62,15 +67,17 @@ export class RadioButton {
 
     /**
      * Handle click on the host component.
+     * Selects the radio button if it's not disabled.
      */
     protected onClick(): void {
-        if (!this.disabled()) {
+        if (!this.isDisabled()) {
             this.select();
         }
     }
 
     /**
      * Synchronize internal input state.
+     * Triggered when the native radio input changes.
      */
     protected onInputChange(): void {
         this.select();
@@ -78,6 +85,7 @@ export class RadioButton {
 
     /**
      * Select this radio button by updating the group value.
+     * Notifies the parent radio group of the selection.
      */
     private select(): void {
         if (this.group) {

@@ -23,6 +23,31 @@ module.exports = config.defineConfig(
                 { blankLine: 'always', prev: 'block-like', next: '*' },
             ],
             'arrow-body-style': ['error', 'as-needed'],
+            '@typescript-eslint/member-ordering': [
+                'error',
+                {
+                    default: [
+                        // Fields
+                        'private-static-field',
+                        'private-instance-field',
+                        'protected-static-field',
+                        'protected-instance-field',
+                        'public-static-field',
+                        'public-instance-field',
+
+                        // Constructor
+                        'constructor',
+
+                        // Methods
+                        'public-static-method',
+                        'public-instance-method',
+                        'protected-static-method',
+                        'protected-instance-method',
+                        'private-static-method',
+                        'private-instance-method',
+                    ],
+                },
+            ],
         },
     },
     {

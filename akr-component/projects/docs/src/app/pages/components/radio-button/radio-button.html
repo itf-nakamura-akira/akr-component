@@ -74,6 +74,9 @@
                     class="p-4 border rounded-xl hover:border-blue-500 transition-colors cursor-pointer bg-white"
                     [class.border-blue-600]="cardSelected() === 'plan1'"
                     (click)="cardSelected.set('plan1')"
+                    (keydown.enter)="cardSelected.set('plan1')"
+                    tabindex="0"
+                    role="button"
                 >
                     <akr-radio-button value="plan1">
                         <div class="flex flex-col">
@@ -86,6 +89,9 @@
                     class="p-4 border rounded-xl hover:border-blue-500 transition-colors cursor-pointer bg-white"
                     [class.border-blue-600]="cardSelected() === 'plan2'"
                     (click)="cardSelected.set('plan2')"
+                    (keydown.enter)="cardSelected.set('plan2')"
+                    tabindex="0"
+                    role="button"
                 >
                     <akr-radio-button value="plan2">
                         <div class="flex flex-col">

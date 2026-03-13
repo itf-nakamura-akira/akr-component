@@ -2,7 +2,7 @@
     class="akr-radio-host"
     [attr.data-severity]="severity()"
     [attr.data-checked]="checked()"
-    [attr.data-disabled]="disabled()"
+    [attr.data-disabled]="isDisabled()"
 >
     <input
         type="radio"
@@ -10,7 +10,7 @@
         [attr.name]="name()"
         [attr.value]="value()"
         [checked]="checked()"
-        [disabled]="disabled()"
+        [disabled]="isDisabled()"
         (change)="onInputChange()"
     />
     <div class="akr-radio-box">
