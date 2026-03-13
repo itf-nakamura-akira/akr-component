@@ -42,6 +42,14 @@ describe('AkrFormField', () => {
         expect(label.textContent.trim()).toBe('Test Label');
     });
 
+    it('should associate label with input via id', () => {
+        const label = hostFixture.nativeElement.querySelector('.form-field-label');
+        const input = hostFixture.nativeElement.querySelector('input[akr-input]');
+
+        expect(input.id).toBeTruthy();
+        expect(label.getAttribute('for')).toBe(input.id);
+    });
+
     it('should apply invalid class to host and show error message when input is invalid', () => {
         hostComponent.invalid.set(true);
         hostFixture.detectChanges();

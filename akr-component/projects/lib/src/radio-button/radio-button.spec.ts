@@ -11,6 +11,7 @@ import { RadioButtonGroup } from './radio-button-group';
 class MockRadioButtonGroup {
     value = signal<string | undefined>(undefined);
     name = signal<string | null>(null);
+    disabled = signal<boolean>(false);
 }
 
 describe('RadioButton', () => {
@@ -52,6 +53,19 @@ describe('RadioButton', () => {
         const spy = vi.spyOn(group.value, 'set');
 
         fixture.componentRef.setInput('disabled', true);
+        fixture.detectChanges();
+
+        // Simulate click on host
+        fixture.nativeElement.click();
+
+        expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should not select value when group is disabled', () => {
+        const group = TestBed.inject(RadioButtonGroup) as unknown as MockRadioButtonGroup;
+        const spy = vi.spyOn(group.value, 'set');
+
+        group.disabled.set(true);
         fixture.detectChanges();
 
         // Simulate click on host
