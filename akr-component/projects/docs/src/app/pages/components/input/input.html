@@ -1,6 +1,13 @@
-<div class="flex flex-col gap-8 w-80">
+<div class="flex flex-col gap-8 p-8 max-w-4xl mx-auto">
+    <section>
+        <h1 class="text-3xl font-bold mb-4">Input</h1>
+        <p class="text-gray-600 mb-6">
+            Standard input fields for user data entry, supporting validation, hints, and various states.
+        </p>
+    </section>
+
     <section class="flex flex-col gap-4">
-        <h2 class="text-lg font-bold">Basic Usage</h2>
+        <h2 class="text-xl font-semibold mb-4">Basic Usage</h2>
         <akr-form-field label="Username">
             <input akr-input placeholder="Enter your username" />
         </akr-form-field>
@@ -15,7 +22,7 @@
     </section>
 
     <section class="flex flex-col gap-4">
-        <h2 class="text-lg font-bold">Validation & Hints</h2>
+        <h2 class="text-xl font-semibold mb-4">Validation & Hints</h2>
         <akr-form-field label="Email" [required]="true">
             <input akr-input type="email" placeholder="example@mail.com" hintMessage="We'll never share your email." />
         </akr-form-field>
@@ -36,7 +43,7 @@
     </section>
 
     <section class="flex flex-col gap-4">
-        <h2 class="text-lg font-bold">States</h2>
+        <h2 class="text-xl font-semibold mb-4">States</h2>
         <akr-form-field label="Readonly">
             <input akr-input value="you can't edit this" readonly />
         </akr-form-field>
@@ -47,12 +54,12 @@
     </section>
 
     <section class="flex flex-col gap-4">
-        <h2 class="text-lg font-bold">Standalone Input</h2>
+        <h2 class="text-xl font-semibold mb-4">Standalone Input</h2>
         <input akr-input placeholder="Input without form field" />
     </section>
 
     <section class="flex flex-col gap-4">
-        <h2 class="text-lg font-bold">Customization</h2>
+        <h2 class="text-xl font-semibold mb-4">Customization</h2>
         <app-input-custom-required />
     </section>
 </div>
