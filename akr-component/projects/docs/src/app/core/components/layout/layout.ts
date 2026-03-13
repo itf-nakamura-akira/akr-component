@@ -45,6 +45,11 @@ export class Layout {
                     value: 'components/navigation-tree',
                     routerLink: '/components/navigation-tree',
                 },
+                {
+                    name: 'Radio Button',
+                    value: 'components/radio-button',
+                    routerLink: '/components/radio-button',
+                },
             ],
         },
     ];

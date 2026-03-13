@@ -22,6 +22,10 @@ export const routes: Routes = [
                         loadComponent: () => import('./pages/components/input/input'),
                     },
                     {
+                        path: 'radio-button',
+                        loadComponent: () => import('./pages/components/radio-button/radio-button'),
+                    },
+                    {
                         path: '**',
                         redirectTo: 'alert',
                     },

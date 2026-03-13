@@ -1,0 +1,22 @@
+<div
+    class="akr-radio-host"
+    [attr.data-severity]="severity()"
+    [attr.data-checked]="checked()"
+    [attr.data-disabled]="disabled()"
+>
+    <input
+        type="radio"
+        class="akr-radio-native"
+        [attr.name]="name()"
+        [attr.value]="value()"
+        [checked]="checked()"
+        [disabled]="disabled()"
+        (change)="onInputChange()"
+    />
+    <div class="akr-radio-box">
+        <div class="akr-radio-inner"></div>
+    </div>
+    <div class="akr-radio-label">
+        <ng-content />
+    </div>
+</div>
