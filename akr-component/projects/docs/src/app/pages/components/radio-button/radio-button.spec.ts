@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RadioButton } from './radio-button';
+import RadioButton from './radio-button';
 
 describe('RadioButton', () => {
     let component: RadioButton;

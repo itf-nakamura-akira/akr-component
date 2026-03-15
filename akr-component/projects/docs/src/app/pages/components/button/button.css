@@ -1,0 +1,61 @@
+.page-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--akr-border);
+}
+
+h3 {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--akr-foreground-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-end;
+}
+
+.button-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.demo-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.demo-table th,
+.demo-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--akr-border);
+}
+
+.demo-table th {
+    background-color: var(--akr-secondary-hover);
+    font-weight: 600;
+}
+
+.demo-table strong {
+    color: var(--akr-foreground-secondary);
+}

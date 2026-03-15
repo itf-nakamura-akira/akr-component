@@ -3,6 +3,7 @@
  */
 
 export * from './alert/alert';
+export * from './button/button';
 export * from './form-field/form-field';
 export * from './input/input';
 export * from './navigation-tree/navigation-tree';

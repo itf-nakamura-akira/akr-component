@@ -1,0 +1,150 @@
+:host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    line-height: 1.25rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition:
+        background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+        color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+    text-decoration: none;
+    user-select: none;
+    gap: 0.5rem;
+    outline: none;
+
+    /* Default color variables (primary) */
+    --button-bg: var(--akr-primary);
+    --button-bg-hover: var(--akr-primary-hover);
+    --button-bg-active: var(--akr-primary-active);
+    --button-fg: var(--akr-primary-foreground);
+    --button-outline: var(--akr-border);
+
+    &.akr-button-secondary {
+        --button-bg: var(--akr-secondary);
+        --button-bg-hover: var(--akr-secondary-hover);
+        --button-bg-active: var(--akr-secondary-active);
+        --button-fg: var(--akr-secondary-foreground);
+        --button-outline: var(--akr-border);
+    }
+
+    &.akr-button-danger {
+        --button-bg: var(--akr-danger);
+        --button-bg-hover: var(--akr-danger-hover);
+        --button-bg-active: var(--akr-danger-active);
+        --button-fg: var(--akr-danger-foreground);
+        --button-outline: var(--akr-danger);
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--button-bg);
+        outline-offset: 2px;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    /* Sizes */
+    &.akr-button-sm {
+        height: 2rem;
+        padding: 0 0.75rem;
+        font-size: 0.75rem;
+
+        &.akr-button-icon {
+            width: 2rem;
+            padding: 0;
+        }
+    }
+
+    &.akr-button-md {
+        height: 2.5rem;
+        padding: 0 1rem;
+        font-size: 0.875rem;
+
+        &.akr-button-icon {
+            width: 2.5rem;
+            padding: 0;
+        }
+    }
+
+    &.akr-button-lg {
+        height: 3rem;
+        padding: 0 1.5rem;
+        font-size: 1rem;
+
+        &.akr-button-icon {
+            width: 3rem;
+            padding: 0;
+        }
+    }
+
+    /* Solid Variant */
+    &.akr-button-solid {
+        background-color: var(--button-bg);
+        color: var(--button-fg);
+
+        &:hover {
+            background-color: var(--button-bg-hover);
+        }
+
+        &:active {
+            background-color: var(--button-bg-active);
+        }
+    }
+
+    /* Outline Variant */
+    &.akr-button-outline {
+        background-color: transparent;
+        border-color: var(--button-outline);
+        color: var(--button-fg);
+
+        &:hover {
+            background-color: var(--button-bg);
+            border-color: var(--button-bg);
+        }
+
+        &:active {
+            background-color: var(--button-bg-active);
+        }
+    }
+
+    /* Ghost Variant */
+    &.akr-button-ghost {
+        background-color: transparent;
+        color: var(--button-fg);
+
+        &:hover {
+            background-color: var(--button-bg);
+        }
+
+        &:active {
+            background-color: var(--button-bg-active);
+        }
+    }
+
+    /* Icon Variant */
+    &.akr-button-icon {
+        border-radius: 9999px;
+        background-color: transparent;
+        color: var(--button-fg);
+
+        &:hover {
+            background-color: var(--button-bg);
+        }
+
+        &:active {
+            background-color: var(--button-bg-active);
+        }
+    }
+}

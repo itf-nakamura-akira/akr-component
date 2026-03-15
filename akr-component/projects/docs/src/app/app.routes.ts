@@ -14,6 +14,10 @@ export const routes: Routes = [
                         loadComponent: () => import('./pages/components/alert/alert'),
                     },
                     {
+                        path: 'button',
+                        loadComponent: () => import('./pages/components/button/button'),
+                    },
+                    {
                         path: 'navigation-tree',
                         loadComponent: () => import('./pages/components/navigation-tree/navigation-tree'),
                     },

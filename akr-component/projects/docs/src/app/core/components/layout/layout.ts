@@ -36,6 +36,11 @@ export class Layout {
                     routerLink: '/components/alert',
                 },
                 {
+                    name: 'Button',
+                    value: 'components/button',
+                    routerLink: '/components/button',
+                },
+                {
                     name: 'Input',
                     value: 'components/input',
                     routerLink: '/components/input',

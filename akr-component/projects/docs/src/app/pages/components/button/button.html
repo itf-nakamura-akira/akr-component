@@ -1,0 +1,105 @@
+<div class="page-container">
+    <h1>Button</h1>
+    <p>A button component that supports various visual variants, colors, and sizes.</p>
+
+    <section>
+        <h2>All Combinations (Variants × Colors)</h2>
+        <table class="demo-table">
+            <thead>
+                <tr>
+                    <th>Variant / Color</th>
+                    <th>Primary</th>
+                    <th>Secondary</th>
+                    <th>Danger</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Solid</strong></td>
+                    <td><button akr-button color="primary" variant="solid">Primary</button></td>
+                    <td><button akr-button color="secondary" variant="solid">Secondary</button></td>
+                    <td><button akr-button color="danger" variant="solid">Danger</button></td>
+                </tr>
+                <tr>
+                    <td><strong>Outline</strong></td>
+                    <td><button akr-button color="primary" variant="outline">Primary</button></td>
+                    <td><button akr-button color="secondary" variant="outline">Secondary</button></td>
+                    <td><button akr-button color="danger" variant="outline">Danger</button></td>
+                </tr>
+                <tr>
+                    <td><strong>Ghost</strong></td>
+                    <td><button akr-button color="primary" variant="ghost">Primary</button></td>
+                    <td><button akr-button color="secondary" variant="ghost">Secondary</button></td>
+                    <td><button akr-button color="danger" variant="ghost">Danger</button></td>
+                </tr>
+                <tr>
+                    <td><strong>Icon</strong></td>
+                    <td>
+                        <button akr-button color="primary" variant="icon">
+                            <span class="material-symbols-outlined">add</span>
+                        </button>
+                    </td>
+                    <td>
+                        <button akr-button color="secondary" variant="icon">
+                            <span class="material-symbols-outlined">add</span>
+                        </button>
+                    </td>
+                    <td>
+                        <button akr-button color="danger" variant="icon">
+                            <span class="material-symbols-outlined">add</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Sizes</h2>
+        <div class="button-group">
+            <div class="button-item">
+                <h3>Small</h3>
+                <button akr-button size="sm" variant="solid">Small Button</button>
+            </div>
+            <div class="button-item">
+                <h3>Medium</h3>
+                <button akr-button size="md" variant="solid">Medium Button</button>
+            </div>
+            <div class="button-item">
+                <h3>Large</h3>
+                <button akr-button size="lg" variant="solid">Large Button</button>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Anchor Tag</h2>
+        <div class="button-group">
+            <div class="button-item">
+                <h3>Link with Outline</h3>
+                <a akr-button color="primary" href="https://github.com" target="_blank" variant="outline">GitHub</a>
+            </div>
+            <div class="button-item">
+                <h3>Link with Ghost</h3>
+                <a akr-button color="secondary" href="https://github.com" target="_blank" variant="ghost">
+                    Documentation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Disabled State</h2>
+        <div class="button-group">
+            <div class="button-item">
+                <button akr-button disabled color="primary" variant="solid">Solid Disabled</button>
+            </div>
+            <div class="button-item">
+                <button akr-button disabled color="primary" variant="outline">Outline Disabled</button>
+            </div>
+            <div class="button-item">
+                <button akr-button disabled color="primary" variant="ghost">Ghost Disabled</button>
+            </div>
+        </div>
+    </section>
+</div>
