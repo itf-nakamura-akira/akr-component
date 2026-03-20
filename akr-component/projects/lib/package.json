@@ -10,9 +10,15 @@
     ],
     "author": "Nakamura Akira <nakamura.akira@itfllc.co.jp>",
     "license": "MIT",
-    "repository": {},
-    "bugs": {},
-    "homepage": "",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/itf-nakamura-akira/akr-component.git",
+        "directory": "akr-component/projects/lib"
+    },
+    "bugs": {
+        "url": "https://github.com/itf-nakamura-akira/akr-component/issues"
+    },
+    "homepage": "https://github.com/itf-nakamura-akira/akr-component/tree/main/akr-component/projects/lib#readme",
     "sideEffects": false,
     "exports": {
         "./styles.css": {

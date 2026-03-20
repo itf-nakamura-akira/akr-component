@@ -1,69 +1,57 @@
-# @akr/akr-component
+# AKR Component (Angular Kernel Resources)
 
-[English](./README.md) | [日本語](./README.ja.md) | [简体中文](./README.zh.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [Français](./README.fr.md) | [हिन्दी](./README.hi.md)
+A collection of lightweight, accessible, and standalone UI components for modern Angular (v21+) applications.
 
-A collection of lightweight, accessible, and standalone UI components for modern Angular applications.
+## 📁 Repository Structure
 
-## 🚀 Features
+This is a monorepo containing the component library and its documentation site.
 
-- **Angular v21 Ready**: Built with the latest Angular features.
-- **Standalone Components**: No NgModules required, easy to import and use.
-- **Lightweight & Fast**: Minimal dependencies for optimal performance.
-- **Fully Accessible**: Designed with accessibility in mind (using `@angular/aria`).
+- **[projects/lib](./akr-component/projects/lib)**: The core UI component library (`@akr506/akr-component`).
+- **[projects/docs](./akr-component/projects/docs)**: The documentation and interactive demonstration site.
 
-## 📦 Installation
+## 🚀 Getting Started
 
-Install the package via npm:
+To get started with development, follow these steps:
+
+### 1. Installation
+
+Install dependencies for the entire project (we recommend using [Bun](https://bun.sh)):
 
 ```bash
-npm install @akr/akr-component
+bun install
 ```
 
-## 🛠 Usage
+### 2. Development
 
-Simply import the components you need directly into your standalone component:
+You can run the documentation site locally to see components in action:
 
-```typescript
-import { AkrAlert, AkrButton } from '@akr/akr-component';
-import { Component } from '@angular/core';
-
-@Component({
-    selector: 'app-root',
-    standalone: true,
-    imports: [AkrButton, AkrAlert],
-    template: `
-        <akr-alert type="success">Welcome to AKR Components!</akr-alert>
-        <akr-button (click)="onHandleClick()">Click Me</akr-button>
-    `,
-})
-export class AppComponent {
-    onHandleClick() {
-        console.log('Button clicked!');
-    }
-}
+```bash
+cd akr-component
+bun run start:docs
 ```
 
-### Styles
+To work on the library with live-rebuild enabled:
 
-Don't forget to include the library styles in your `angular.json` or `styles.css`:
-
-```css
-@import '@akr/akr-component/styles.css';
+```bash
+cd akr-component
+bun run start:lib
 ```
 
-## 🧱 Components
+### 3. Build
 
-- **Alert**: Informative messages with multiple types.
-- **Button**: Versatile button component with various styles.
-- **Form Field**: Container for form elements with label and error support.
-- **Input**: Enhanced text input fields.
-- **Navigation Tree**: Hierarchical data visualization.
-- **Radio Button**: Custom radio buttons and groups.
+To build the library for distribution:
+
+```bash
+cd akr-component
+bun run build:lib
+```
+
+## 🛠 Features
+
+- **Angular v21 Ready**: Using Signals, Standalone Components, and New Control Flow.
+- **Modern Styling**: Powered by Tailwind CSS v4 and modern CSS features (OKLCH, color-mix).
+- **Accessibility**: Built with `@angular/aria` to ensure WCAG compliance.
 
 ## 📄 License
 
 MIT © [Nakamura Akira](mailto:nakamura.akira@itfllc.co.jp)
-
-## 📛 Origin of the Name
-
-While "AKR" officially stands for **Angular Kernel Resources** (you might want to use this one for your boss), its true origin is derived from the developer's name.

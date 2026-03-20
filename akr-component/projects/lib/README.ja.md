@@ -1,4 +1,4 @@
-# @akr/akr-component
+# @akr506/akr-component
 
 [English](./README.md) | [日本語](./README.ja.md) | [简体中文](./README.zh.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [Français](./README.fr.md) | [हिन्दी](./README.hi.md)
 
@@ -16,15 +16,15 @@
 npm経由でパッケージをインストールします：
 
 ```bash
-npm install @akr/akr-component
+npm install @akr506/akr-component
 ```
 
 ## 🛠 使い方
 
-スタンドアロンコンポーネントに必要なコンポーネントを直接インポートして使用します：
+スタンドアロンコンポーネントに必要なコンポーネントを直接インポートして使用します。ボタンなどの一部のコンポーネントは属性として使用することに注意してください：
 
 ```typescript
-import { AkrAlert, AkrButton } from '@akr/akr-component';
+import { AkrAlert, AkrButton } from '@akr506/akr-component';
 import { Component } from '@angular/core';
 
 @Component({
@@ -32,8 +32,8 @@ import { Component } from '@angular/core';
     standalone: true,
     imports: [AkrButton, AkrAlert],
     template: `
-        <akr-alert type="success">AKR Componentsへようこそ！</akr-alert>
-        <akr-button (click)="onHandleClick()">クリックしてね</akr-button>
+        <akr-alert severity="success">AKR Componentsへようこそ！</akr-alert>
+        <button akr-button (click)="onHandleClick()">クリックしてね</button>
     `,
 })
 export class AppComponent {
