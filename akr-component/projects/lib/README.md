@@ -1,64 +1,69 @@
-# Lib
+# @akr/akr-component
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
+[English](./README.md) | [日本語](./README.ja.md) | [简体中文](./README.zh.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [Français](./README.fr.md) | [हिन्दी](./README.hi.md)
 
-## Code scaffolding
+A collection of lightweight, accessible, and standalone UI components for modern Angular applications.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🚀 Features
 
-```bash
-ng generate component component-name
-```
+- **Angular v21 Ready**: Built with the latest Angular features.
+- **Standalone Components**: No NgModules required, easy to import and use.
+- **Lightweight & Fast**: Minimal dependencies for optimal performance.
+- **Fully Accessible**: Designed with accessibility in mind (using `@angular/aria`).
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 📦 Installation
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the library, run:
+Install the package via npm:
 
 ```bash
-ng build lib
+npm install @akr/akr-component
 ```
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
+## 🛠 Usage
 
-### Publishing the Library
+Simply import the components you need directly into your standalone component:
 
-Once the project is built, you can publish your library by following these steps:
+```typescript
+import { AkrAlert, AkrButton } from '@akr/akr-component';
+import { Component } from '@angular/core';
 
-1. Navigate to the `dist` directory:
-
-    ```bash
-    cd dist/lib
-    ```
-
-2. Run the `npm publish` command to publish your library to the npm registry:
-    ```bash
-    npm publish
-    ```
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
+@Component({
+    selector: 'app-root',
+    standalone: true,
+    imports: [AkrButton, AkrAlert],
+    template: `
+        <akr-alert type="success">Welcome to AKR Components!</akr-alert>
+        <akr-button (click)="onHandleClick()">Click Me</akr-button>
+    `,
+})
+export class AppComponent {
+    onHandleClick() {
+        console.log('Button clicked!');
+    }
+}
 ```
 
-## Running end-to-end tests
+### Styles
 
-For end-to-end (e2e) testing, run:
+Don't forget to include the library styles in your `angular.json` or `styles.css`:
 
-```bash
-ng e2e
+```css
+@import '@akr/akr-component/styles.css';
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 🧱 Components
 
-## Additional Resources
+- **Alert**: Informative messages with multiple types.
+- **Button**: Versatile button component with various styles.
+- **Form Field**: Container for form elements with label and error support.
+- **Input**: Enhanced text input fields.
+- **Navigation Tree**: Hierarchical data visualization.
+- **Radio Button**: Custom radio buttons and groups.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 📄 License
+
+MIT © [Nakamura Akira](mailto:nakamura.akira@itfllc.co.jp)
+
+## 📛 Origin of the Name
+
+While "AKR" officially stands for **Angular Kernel Resources** (you might want to use this one for your boss), its true origin is derived from the developer's name.

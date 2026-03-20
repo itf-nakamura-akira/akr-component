@@ -4,5 +4,8 @@
     "lib": {
         "entryFile": "src/public-api.ts"
     },
-    "assets": [{ "input": "src", "glob": "styles.css", "output": "." }]
+    "assets": [
+        { "input": "src", "glob": "styles.css", "output": "." },
+        { "input": ".", "glob": "README.*.md", "output": "." }
+    ]
 }

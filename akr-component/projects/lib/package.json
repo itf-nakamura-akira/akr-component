@@ -1,6 +1,18 @@
 {
-    "name": "akr-component",
+    "name": "@akr506/akr-component",
     "version": "0.0.1",
+    "description": "A collection of lightweight and standalone UI components for modern Angular applications.",
+    "keywords": [
+        "angular",
+        "components",
+        "ui",
+        "library"
+    ],
+    "author": "Nakamura Akira <nakamura.akira@itfllc.co.jp>",
+    "license": "MIT",
+    "repository": {},
+    "bugs": {},
+    "homepage": "",
     "sideEffects": false,
     "exports": {
         "./styles.css": {
@@ -12,8 +24,8 @@
         "tslib": "^2.3.0"
     },
     "peerDependencies": {
-        "@angular/aria": "^21.2.0",
-        "@angular/common": "^21.2.0",
-        "@angular/core": "^21.2.0"
+        "@angular/aria": "^21.0.0",
+        "@angular/common": "^21.0.0",
+        "@angular/core": "^21.0.0"
     }
 }
