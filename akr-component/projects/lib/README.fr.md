@@ -1,4 +1,4 @@
-# @akr/akr-component
+# @akr506/akr-component
 
 [English](./README.md) | [日本語](./README.ja.md) | [简体中文](./README.zh.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [Français](./README.fr.md) | [हिन्दी](./README.hi.md)
 
@@ -16,15 +16,15 @@ Une collection de composants UI légers, accessibles et autonomes (standalone) p
 Installez le paquet via npm :
 
 ```bash
-npm install @akr/akr-component
+npm install @akr506/akr-component
 ```
 
 ## 🛠 Utilisation
 
-Importez simplement les composants dont vous avez besoin directement dans votre composant autonome :
+Importez simplement les composants dont vous avez besoin directement dans votre composant autonome. Notez que certains composants, comme les boutons, sont utilisés comme attributs :
 
 ```typescript
-import { AkrAlert, AkrButton } from '@akr/akr-component';
+import { AkrAlert, AkrButton } from '@akr506/akr-component';
 import { Component } from '@angular/core';
 
 @Component({
@@ -32,8 +32,8 @@ import { Component } from '@angular/core';
     standalone: true,
     imports: [AkrButton, AkrAlert],
     template: `
-        <akr-alert type="success">Bienvenue dans AKR Components !</akr-alert>
-        <akr-button (click)="onHandleClick()">Cliquez-moi</akr-button>
+        <akr-alert severity="success">Bienvenue dans AKR Components !</akr-alert>
+        <button akr-button (click)="onHandleClick()">Cliquez-moi</button>
     `,
 })
 export class AppComponent {
@@ -48,7 +48,7 @@ export class AppComponent {
 N'oubliez pas d'inclure les styles de la bibliothèque dans votre `angular.json` ou `styles.css` :
 
 ```css
-@import '@akr/akr-component/styles.css';
+@import '@akr506/akr-component/styles.css';
 ```
 
 ## 🧱 Composants
@@ -66,4 +66,4 @@ MIT © [Nakamura Akira](mailto:nakamura.akira@itfllc.co.jp)
 
 ## 📛 Origine du nom
 
-Bien que « AKR » signifie officiellement **Angular Kernel Resources** (utilisez cette explication pour votre patron), sa véritable origine provient du nom du développeur.
+Bien que « AKR » signifie officiellement **Angular Kernel Resources** (vous voudrez peut-être utiliser cette explication pour votre patron), sa véritable origine est dérivée du nom du développeur.
