@@ -1,4 +1,4 @@
-# @akr/akr-component
+# @akr506/akr-component
 
 [English](./README.md) | [日本語](./README.ja.md) | [简体中文](./README.zh.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [Français](./README.fr.md) | [हिन्दी](./README.hi.md)
 
@@ -16,15 +16,15 @@
 npm을 통해 패키지를 설치합니다:
 
 ```bash
-npm install @akr/akr-component
+npm install @akr506/akr-component
 ```
 
 ## 🛠 사용법
 
-필요한 컴포넌트를 스탠드얼론 컴포넌트에 직접 임포트하여 사용하세요:
+필요한 컴포넌트를 스탠드얼론 컴포넌트에 직접 임포트하여 사용하세요. 버튼과 같은 일부 컴포넌트는 속성(attribute)으로 사용된다는 점에 유의하세요:
 
 ```typescript
-import { AkrAlert, AkrButton } from '@akr/akr-component';
+import { AkrAlert, AkrButton } from '@akr506/akr-component';
 import { Component } from '@angular/core';
 
 @Component({
@@ -32,8 +32,8 @@ import { Component } from '@angular/core';
     standalone: true,
     imports: [AkrButton, AkrAlert],
     template: `
-        <akr-alert type="success">AKR Components에 오신 것을 환영합니다!</akr-alert>
-        <akr-button (click)="onHandleClick()">클릭하세요</akr-button>
+        <akr-alert severity="success">AKR Components에 오신 것을 환영합니다!</akr-alert>
+        <button akr-button (click)="onHandleClick()">클릭하세요</button>
     `,
 })
 export class AppComponent {
@@ -48,7 +48,7 @@ export class AppComponent {
 `angular.json` 또는 `styles.css`에 라이브러리 스타일을 포함하는 것을 잊지 마세요:
 
 ```css
-@import '@akr/akr-component/styles.css';
+@import '@akr506/akr-component/styles.css';
 ```
 
 ## 🧱 컴포넌트
@@ -66,4 +66,4 @@ MIT © [Nakamura Akira](mailto:nakamura.akira@itfllc.co.jp)
 
 ## 📛 이름의 유래
 
-공식적으로 "AKR"은 **Angular Kernel Resources**의 약자입니다(상사에게 보고할 때 이 설명을 사용하세요). 실제 유래는 개발자의 이름에서 따온 것입니다.
+'AKR'은 공식적으로 **Angular Kernel Resources**의 약자이지만(상사에게는 이 설명을 사용하고 싶을 수도 있습니다), 실제 기원은 개발자의 이름에서 유래되었습니다.

@@ -1,6 +1,5 @@
 {
     "name": "akr-component",
-    "version": "0.0.0",
     "private": true,
     "scripts": {
         "start:lib": "ng build lib --watch --configuration development",

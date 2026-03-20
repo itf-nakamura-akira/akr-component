@@ -48,7 +48,7 @@ export class AppComponent {
 Don't forget to include the library styles in your `angular.json` or `styles.css`:
 
 ```css
-@import '@akr/akr-component/styles.css';
+@import '@akr506/akr-component/styles.css';
 ```
 
 ## 🧱 Components

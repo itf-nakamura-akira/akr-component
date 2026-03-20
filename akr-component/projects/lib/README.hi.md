@@ -1,4 +1,4 @@
-# @akr/akr-component
+# @akr506/akr-component
 
 [English](./README.md) | [日本語](./README.ja.md) | [简体中文](./README.zh.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [Français](./README.fr.md) | [हिन्दी](./README.hi.md)
 
@@ -16,15 +16,15 @@
 npm के माध्यम से पैकेज स्थापित करें:
 
 ```bash
-npm install @akr/akr-component
+npm install @akr506/akr-component
 ```
 
 ## 🛠 उपयोग
 
-बस उन घटकों को सीधे अपने स्टैंडअलोन घटक में आयात करें जिनकी आपको आवश्यकता है:
+बस उन घटकों को सीधे अपने स्टैंडअलोन घटक में आयात करें जिनकी आपको आवश्यकता है। ध्यान दें कि कुछ घटक, जैसे बटन, विशेषता (attributes) के रूप में उपयोग किए जाते हैं:
 
 ```typescript
-import { AkrAlert, AkrButton } from '@akr/akr-component';
+import { AkrAlert, AkrButton } from '@akr506/akr-component';
 import { Component } from '@angular/core';
 
 @Component({
@@ -32,8 +32,8 @@ import { Component } from '@angular/core';
     standalone: true,
     imports: [AkrButton, AkrAlert],
     template: `
-        <akr-alert type="success">AKR Components में आपका स्वागत है!</akr-alert>
-        <akr-button (click)="onHandleClick()">मुझे क्लिक करें</akr-button>
+        <akr-alert severity="success">AKR Components में आपका स्वागत है!</akr-alert>
+        <button akr-button (click)="onHandleClick()">मुझे क्लिक करें</button>
     `,
 })
 export class AppComponent {
@@ -48,7 +48,7 @@ export class AppComponent {
 अपने `angular.json` या `styles.css` में लाइब्रेरी स्टाइल शामिल करना न भूलें:
 
 ```css
-@import '@akr/akr-component/styles.css';
+@import '@akr506/akr-component/styles.css';
 ```
 
 ## 🧱 घटक
@@ -66,4 +66,4 @@ MIT © [Nakamura Akira](mailto:nakamura.akira@itfllc.co.jp)
 
 ## 📛 नाम की उत्पत्ति
 
-जबकि "AKR" का आधिकारिक अर्थ **Angular Kernel Resources** है (आप अपने बॉस को यही बताएं), इसकी वास्तविक उत्पत्ति डेवलपर के नाम से हुई है।
+जबकि "AKR" आधिकारिक तौर पर **Angular Kernel Resources** के लिए खड़ा है (हो सकता है कि आप अपने बॉस के लिए इसका उपयोग करना चाहें), इसकी वास्तविक उत्पत्ति डेवलपर के नाम से ली गई है।

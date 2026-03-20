@@ -1,4 +1,4 @@
-# @akr/akr-component
+# @akr506/akr-component
 
 [English](./README.md) | [日本語](./README.ja.md) | [简体中文](./README.zh.md) | [한국어](./README.ko.md) | [Deutsch](./README.de.md) | [Français](./README.fr.md) | [हिन्दी](./README.hi.md)
 
@@ -16,15 +16,15 @@ Eine Sammlung von leichtgewichtigen, barrierefreien und eigenständigen (standal
 Installieren Sie das Paket über npm:
 
 ```bash
-npm install @akr/akr-component
+npm install @akr506/akr-component
 ```
 
 ## 🛠 Verwendung
 
-Importieren Sie die benötigten Komponenten direkt in Ihre Standalone-Komponente:
+Importieren Sie die benötigten Komponenten direkt in Ihre Standalone-Komponente. Bitte beachten Sie, dass einige Komponenten, wie z.B. Buttons, als Attribute verwendet werden:
 
 ```typescript
-import { AkrAlert, AkrButton } from '@akr/akr-component';
+import { AkrAlert, AkrButton } from '@akr506/akr-component';
 import { Component } from '@angular/core';
 
 @Component({
@@ -32,8 +32,8 @@ import { Component } from '@angular/core';
     standalone: true,
     imports: [AkrButton, AkrAlert],
     template: `
-        <akr-alert type="success">Willkommen bei AKR Components!</akr-alert>
-        <akr-button (click)="onHandleClick()">Klick mich</akr-button>
+        <akr-alert severity="success">Willkommen bei AKR Components!</akr-alert>
+        <button akr-button (click)="onHandleClick()">Klick mich</button>
     `,
 })
 export class AppComponent {
@@ -48,7 +48,7 @@ export class AppComponent {
 Vergessen Sie nicht, die Bibliotheksstile in Ihre `angular.json` oder `styles.css` aufzunehmen:
 
 ```css
-@import '@akr/akr-component/styles.css';
+@import '@akr506/akr-component/styles.css';
 ```
 
 ## 🧱 Komponenten
@@ -66,4 +66,4 @@ MIT © [Nakamura Akira](mailto:nakamura.akira@itfllc.co.jp)
 
 ## 📛 Herkunft des Namens
 
-Während "AKR" offiziell für **Angular Kernel Resources** steht (verwenden Sie diese Erklärung gegenüber Ihrem Chef), leitet sich der wahre Ursprung vom Namen des Entwicklers ab.
+Während "AKR" offiziell für **Angular Kernel Resources** steht (vielleicht möchten Sie diese Version für Ihren Chef verwenden), stammt der wahre Ursprung vom Namen des Entwicklers ab.

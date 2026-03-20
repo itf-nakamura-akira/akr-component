@@ -48,7 +48,7 @@ export class AppComponent {
 `angular.json` または `styles.css` にライブラリのスタイルを含めるのを忘れないでください：
 
 ```css
-@import '@akr/akr-component/styles.css';
+@import '@akr506/akr-component/styles.css';
 ```
 
 ## 🧱 コンポーネント
