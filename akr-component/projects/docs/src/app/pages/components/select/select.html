@@ -28,20 +28,10 @@
     <h2>Multi-select</h2>
     <p>
         Enable multiple selection by setting the <code>[multiple]</code> input to <code>true</code>. Selected:
-        <strong>{{ selectedPrioritiesLabel() }}</strong>
+        <strong>{{ selectedTagsLabel() }}</strong>
     </p>
     <div class="example">
-        <akr-select
-            [(value)]="selectedPriorities"
-            [options]="priorityOptions()"
-            [multiple]="true"
-            placeholder="Select priorities"
-        >
-            <ng-template akrSelectOptionIcon let-icon>
-                <span class="material-symbols-outlined" translate="no" aria-hidden="true">
-                    {{ icon }}
-                </span>
-            </ng-template>
+        <akr-select [(value)]="selectedTags" [options]="tagOptions()" [multiple]="true" placeholder="Select tags">
         </akr-select>
     </div>
 </section>

@@ -34,12 +34,21 @@ export default class SelectDoc {
         { value: 'Low Priority', icon: 'horizontal_rule' },
     ]);
 
-    /** Multi-selected priorities */
-    readonly selectedPriorities = signal<AkrSelectOption[]>([]);
+    /** Multi-select options (tags) */
+    readonly tagOptions = signal<AkrSelectOption[]>([
+        { value: 'Feature' },
+        { value: 'Bug' },
+        { value: 'Documentation' },
+        { value: 'Enhancement' },
+        { value: 'Design' },
+    ]);
 
-    /** Computed label for selected priorities */
-    readonly selectedPrioritiesLabel = computed(() => {
-        const val = this.selectedPriorities();
+    /** Multi-selected items */
+    readonly selectedTags = signal<AkrSelectOption[]>([]);
+
+    /** Computed label for selected tags */
+    readonly selectedTagsLabel = computed(() => {
+        const val = this.selectedTags();
         return val.length > 0 ? val.map((v) => v.value).join(', ') : 'None';
     });
 

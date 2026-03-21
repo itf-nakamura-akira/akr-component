@@ -1,5 +1,4 @@
-import { Combobox, ComboboxInput, ComboboxPopup, ComboboxPopupContainer } from '@angular/aria/combobox';
-import { Listbox, Option } from '@angular/aria/listbox';
+import { Option } from '@angular/aria/listbox';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { NgTemplateOutlet } from '@angular/common';
 import {
@@ -13,7 +12,6 @@ import {
     model,
     signal,
     TemplateRef,
-    viewChild,
     viewChildren,
 } from '@angular/core';
 import { AkrIcon } from '../internal/icon/icon';
@@ -44,7 +42,7 @@ export class AkrSelectOptionIcon {
 
 @Component({
     selector: 'akr-select',
-    imports: [OverlayModule, NgTemplateOutlet, AkrIcon, Listbox, Option],
+    imports: [OverlayModule, NgTemplateOutlet, AkrIcon],
     templateUrl: './select.html',
     styleUrl: './select.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -74,28 +72,15 @@ export class AkrSelect {
     /** The options available in the listbox. */
     optionElements = viewChildren<Option<AkrSelectOption>>(Option);
 
-    /** The selected icon data. */
-    selectedIcon = computed(() => {
+    /** Current selected items as an array. */
+    readonly selectedItems = computed(() => {
         const val = this.value();
-        if (!val) return undefined;
 
-        if (Array.isArray(val)) {
-            return val.length > 0 ? val[0].icon : undefined;
+        if (!val) {
+            return [];
         }
 
-        return (val as AkrSelectOption).icon;
-    });
-
-    /** The string that is displayed in the combobox. */
-    displayValue = computed(() => {
-        const val = this.value();
-        if (!val) return this.placeholder();
-
-        if (Array.isArray(val)) {
-            return val.length > 0 ? val.map((opt) => opt.value).join(', ') : this.placeholder();
-        }
-
-        return (val as AkrSelectOption).value;
+        return Array.isArray(val) ? val : [val];
     });
 
     /** Toggle popup expansion. */
@@ -105,6 +90,7 @@ export class AkrSelect {
                 event.preventDefault();
                 event.stopPropagation();
             }
+
             this.expanded.update((v) => !v);
         }
     }
@@ -116,7 +102,9 @@ export class AkrSelect {
             event.stopPropagation();
         }
 
-        if (option.disabled) return;
+        if (option.disabled) {
+            return;
+        }
 
         if (this.multiple()) {
             const current = (this.value() as AkrSelectOption[]) || [];
@@ -136,7 +124,10 @@ export class AkrSelect {
     /** Helper to check if an option is selected. */
     isOptionSelected(option: AkrSelectOption): boolean {
         const val = this.value();
-        if (!val) return false;
+
+        if (!val) {
+            return false;
+        }
 
         if (Array.isArray(val)) {
             return val.some((o) => o.value === option.value);
@@ -149,6 +140,7 @@ export class AkrSelect {
         // Scrolls to the active item when the active option changes.
         afterRenderEffect(() => {
             const option = this.optionElements().find((opt) => opt.active());
+
             if (option) {
                 setTimeout(() => option.element.scrollIntoView({ block: 'nearest' }), 50);
             }

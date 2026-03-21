@@ -3,18 +3,34 @@
     [class.akr-expanded]="expanded()"
     [attr.aria-disabled]="disabled() ? 'true' : 'false'"
 >
-    <div cdkOverlayOrigin #origin="cdkOverlayOrigin" class="select" (click)="toggleExpanded($event)">
-        <span class="combobox-label">
-            @if (selectedIcon() && iconTemplate()) {
-                <span class="selected-label-icon">
-                    <ng-container
-                        [ngTemplateOutlet]="iconTemplate()!"
-                        [ngTemplateOutletContext]="{ $implicit: selectedIcon() }"
-                    />
-                </span>
-            }
-            <span class="selected-label-text">{{ displayValue() }}</span>
-        </span>
+    <div
+        cdkOverlayOrigin
+        #origin="cdkOverlayOrigin"
+        class="select"
+        [class.akr-placeholder]="selectedItems().length === 0"
+        (click)="toggleExpanded($event)"
+    >
+        <div class="combobox-label">
+            <div class="selected-items-wrapper">
+                @for (item of selectedItems(); track item.value) {
+                    <span class="selected-item-set">
+                        @if (item.icon && iconTemplate()) {
+                            <span class="selected-label-icon">
+                                <ng-container
+                                    [ngTemplateOutlet]="iconTemplate()!"
+                                    [ngTemplateOutletContext]="{ $implicit: item.icon }"
+                                />
+                            </span>
+                        }
+                        <span class="selected-label-text">{{ item.value }}{{ !$last ? ',' : '' }}</span>
+                    </span>
+                }
+                @if (selectedItems().length === 0) {
+                    <span class="selected-label-text">{{ placeholder() }}</span>
+                }
+            </div>
+        </div>
+        <!-- Input for layout and accessibility focus -->
         <input
             [aria-label]="placeholder() || 'Select an option'"
             [placeholder]="placeholder()"
@@ -24,7 +40,7 @@
             (click)="$event.stopPropagation()"
         />
         <akr-icon
-            class="example-arrow"
+            class="arrow"
             [class.akr-expanded]="expanded()"
             name="keyboard_arrow_down"
             translate="no"
@@ -39,7 +55,7 @@
         [cdkConnectedOverlayWidth]="origin.elementRef.nativeElement.offsetWidth"
         (overlayOutsideClick)="expanded.set(false)"
     >
-        <div class="example-popup-container" (click)="$event.stopPropagation()">
+        <div class="popup-container" (click)="$event.stopPropagation()">
             <div role="listbox" [attr.aria-multiselectable]="multiple() ? 'true' : 'false'">
                 @for (option of options(); track option.value) {
                     <div
@@ -50,15 +66,15 @@
                         (click)="toggleOption(option, $event)"
                     >
                         @if (option.icon && iconTemplate()) {
-                            <span class="example-option-icon">
+                            <span class="option-icon">
                                 <ng-container
                                     [ngTemplateOutlet]="iconTemplate()!"
                                     [ngTemplateOutletContext]="{ $implicit: option.icon }"
                                 />
                             </span>
                         }
-                        <span class="example-option-text">{{ option.value }}</span>
-                        <akr-icon class="example-option-check" name="check" translate="no" aria-hidden="true" />
+                        <span class="option-text">{{ option.value }}</span>
+                        <akr-icon class="option-check" name="check" translate="no" aria-hidden="true" />
                     </div>
                 }
             </div>
