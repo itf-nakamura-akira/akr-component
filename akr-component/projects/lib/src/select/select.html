@@ -1,95 +1,75 @@
 <div
-    class="akr-select-container"
-    [class.akr-expanded]="expanded()"
-    [attr.aria-disabled]="disabled() ? 'true' : 'false'"
+    cdkOverlayOrigin
+    #origin="cdkOverlayOrigin"
+    class="akr-select-trigger"
+    [class.akr-placeholder]="selectedItems().length === 0"
+    (click)="toggleExpanded($event)"
+    (keydown.enter)="toggleExpanded($event)"
+    (keydown.space)="toggleExpanded($event)"
+    tabindex="0"
+    role="combobox"
+    [attr.aria-expanded]="expanded()"
+    [attr.aria-haspopup]="'listbox'"
+    [attr.aria-label]="placeholder() || 'Select an option'"
+    [attr.aria-controls]="expanded() ? listboxId : null"
+>
+    <div class="akr-select-value">
+        @for (item of selectedItems(); track item.value) {
+            @if (item.icon && iconTemplate()) {
+                <span class="akr-selected-icon">
+                    <ng-container
+                        [ngTemplateOutlet]="iconTemplate()!"
+                        [ngTemplateOutletContext]="{ $implicit: item.icon }"
+                    />
+                </span>
+            }
+            <span>{{ item.value }}{{ !$last ? ',' : '' }}</span>
+        }
+        @if (selectedItems().length === 0) {
+            <span>{{ placeholder() }}</span>
+        }
+    </div>
+    <akr-icon class="akr-select-arrow" name="keyboard_arrow_down" translate="no" aria-hidden="true" />
+</div>
+
+<ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="origin"
+    [cdkConnectedOverlayOpen]="expanded()"
+    [cdkConnectedOverlayWidth]="origin.elementRef.nativeElement.offsetWidth"
+    (overlayOutsideClick)="expanded.set(false)"
 >
     <div
-        cdkOverlayOrigin
-        #origin="cdkOverlayOrigin"
-        class="select"
-        [class.akr-placeholder]="selectedItems().length === 0"
-        (click)="toggleExpanded($event)"
-        (keydown.enter)="toggleExpanded($event)"
-        (keydown.space)="toggleExpanded($event)"
-        tabindex="0"
+        class="akr-select-popup"
+        [id]="listboxId"
+        role="listbox"
+        [attr.aria-multiselectable]="multiple() ? 'true' : 'false'"
+        (click)="$event.stopPropagation()"
+        (keydown)="$event.stopPropagation()"
+        tabindex="-1"
     >
-        <div class="combobox-label">
-            <div class="selected-items-wrapper">
-                @for (item of selectedItems(); track item.value) {
-                    <span class="selected-item-set">
-                        @if (item.icon && iconTemplate()) {
-                            <span class="selected-label-icon">
-                                <ng-container
-                                    [ngTemplateOutlet]="iconTemplate()!"
-                                    [ngTemplateOutletContext]="{ $implicit: item.icon }"
-                                />
-                            </span>
-                        }
-                        <span class="selected-label-text">{{ item.value }}{{ !$last ? ',' : '' }}</span>
+        @for (option of options(); track option.value) {
+            <div
+                role="option"
+                class="akr-option"
+                [attr.aria-selected]="isOptionSelected(option) ? 'true' : 'false'"
+                [attr.aria-disabled]="option.disabled ? 'true' : 'false'"
+                (click)="toggleOption(option, $event)"
+                (keydown.enter)="toggleOption(option, $event)"
+                (keydown.space)="toggleOption(option, $event)"
+                tabindex="0"
+            >
+                @if (option.icon && iconTemplate()) {
+                    <span class="akr-option-icon">
+                        <ng-container
+                            [ngTemplateOutlet]="iconTemplate()!"
+                            [ngTemplateOutletContext]="{ $implicit: option.icon }"
+                        />
                     </span>
                 }
-                @if (selectedItems().length === 0) {
-                    <span class="selected-label-text">{{ placeholder() }}</span>
-                }
+                <span class="akr-option-text">{{ option.value }}</span>
+                <akr-icon class="akr-option-check" name="check" translate="no" aria-hidden="true" />
             </div>
-        </div>
-        <!-- Input for layout and accessibility focus -->
-        <input
-            [aria-label]="placeholder() || 'Select an option'"
-            [placeholder]="placeholder()"
-            class="akr-select-input"
-            [disabled]="disabled()"
-            readonly
-            (click)="$event.stopPropagation()"
-            tabindex="-1"
-        />
-        <akr-icon
-            class="arrow"
-            [class.akr-expanded]="expanded()"
-            name="keyboard_arrow_down"
-            translate="no"
-            aria-hidden="true"
-        />
+        }
     </div>
-
-    <ng-template
-        cdkConnectedOverlay
-        [cdkConnectedOverlayOrigin]="origin"
-        [cdkConnectedOverlayOpen]="expanded()"
-        [cdkConnectedOverlayWidth]="origin.elementRef.nativeElement.offsetWidth"
-        (overlayOutsideClick)="expanded.set(false)"
-    >
-        <div
-            class="popup-container"
-            (click)="$event.stopPropagation()"
-            (keydown)="$event.stopPropagation()"
-            tabindex="-1"
-        >
-            <div role="listbox" [attr.aria-multiselectable]="multiple() ? 'true' : 'false'">
-                @for (option of options(); track option.value) {
-                    <div
-                        role="option"
-                        class="akr-option"
-                        [attr.aria-selected]="isOptionSelected(option) ? 'true' : 'false'"
-                        [attr.aria-disabled]="option.disabled ? 'true' : 'false'"
-                        (click)="toggleOption(option, $event)"
-                        (keydown.enter)="toggleOption(option, $event)"
-                        (keydown.space)="toggleOption(option, $event)"
-                        tabindex="0"
-                    >
-                        @if (option.icon && iconTemplate()) {
-                            <span class="option-icon">
-                                <ng-container
-                                    [ngTemplateOutlet]="iconTemplate()!"
-                                    [ngTemplateOutletContext]="{ $implicit: option.icon }"
-                                />
-                            </span>
-                        }
-                        <span class="option-text">{{ option.value }}</span>
-                        <akr-icon class="option-check" name="check" translate="no" aria-hidden="true" />
-                    </div>
-                }
-            </div>
-        </div>
-    </ng-template>
-</div>
+</ng-template>

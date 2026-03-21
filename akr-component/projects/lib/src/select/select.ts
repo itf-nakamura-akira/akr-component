@@ -17,6 +17,8 @@ import {
 } from '@angular/core';
 import { AkrIcon } from '../internal/icon/icon';
 
+let nextId = 0;
+
 /**
  * Data structure representing an option in the AkrSelect component.
  */
@@ -46,15 +48,6 @@ export class AkrSelectOptionIcon {
  * Select Component.
  *
  * An accessible dropdown component that supports single and multiple selection, custom templates, and signal-based inputs.
- *
- * @example
- * ```html
- * <akr-select
- *     [(selected)]="selectedOption"
- *     [options]="options"
- *     placeholder="Select an option"
- * />
- * ```
  */
 @Component({
     selector: 'akr-select',
@@ -62,8 +55,19 @@ export class AkrSelectOptionIcon {
     templateUrl: './select.html',
     styleUrl: './select.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        '[class.akr-expanded]': 'expanded()',
+        '[attr.aria-disabled]': "disabled() ? 'true' : 'false'",
+        class: 'akr-select',
+    },
 })
 export class AkrSelect {
+    /**
+     * Unique ID for the listbox element used in aria-controls.
+     * @internal
+     */
+    protected readonly listboxId = `akr-select-listbox-${nextId++}`;
+
     /**
      * The list of options available for selection.
      */
@@ -71,7 +75,6 @@ export class AkrSelect {
 
     /**
      * The currently selected option(s).
-     * In multiple selection mode, this is an array of options.
      */
     readonly selected = model<AkrSelectOption | AkrSelectOption[] | undefined>();
 
@@ -140,7 +143,6 @@ export class AkrSelect {
 
     /**
      * Toggles the dropdown popup's expanded state.
-     * @param event Optional event to prevent default behavior.
      * @internal
      */
     toggleExpanded(event?: Event): void {
@@ -156,8 +158,6 @@ export class AkrSelect {
 
     /**
      * Manually updates the selection with a specific option.
-     * @param option The option to select or toggle.
-     * @param event Optional event to prevent default behavior.
      * @internal
      */
     toggleOption(option: AkrSelectOption, event?: Event): void {
@@ -187,8 +187,6 @@ export class AkrSelect {
 
     /**
      * Determines if a given option is currently selected.
-     * @param option The option to check.
-     * @returns True if the option is selected.
      * @internal
      */
     isOptionSelected(option: AkrSelectOption): boolean {
