@@ -23,7 +23,7 @@
                     />
                 </span>
             }
-            <span>{{ item.value }}{{ !$last ? ',' : '' }}</span>
+            <span>{{ item.label }}{{ !$last ? ',' : '' }}</span>
         }
         @if (selectedItems().length === 0) {
             <span>{{ placeholder() }}</span>
@@ -60,7 +60,7 @@
                         />
                     </span>
                 }
-                <span class="akr-option-text">{{ option.value }}</span>
+                <span class="akr-option-text">{{ option.label }}</span>
                 <akr-icon class="akr-option-check" name="check" translate="no" aria-hidden="true" />
             </div>
         }

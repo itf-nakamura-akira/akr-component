@@ -1,3 +1,4 @@
+import { ListboxValueChangeEvent } from '@angular/cdk/listbox';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { AkrSelect, AkrSelectOption } from './select';
@@ -6,7 +7,11 @@ describe('AkrSelect', () => {
     let component: AkrSelect;
     let fixture: ComponentFixture<AkrSelect>;
 
-    const mockOptions: AkrSelectOption[] = [{ value: 'Option 1' }, { value: 'Option 2' }, { value: 'Option 3' }];
+    const mockOptions: AkrSelectOption[] = [
+        { value: 'opt1', label: 'Option 1' },
+        { value: 'opt2', label: 'Option 2' },
+        { value: 'opt3', label: 'Option 3' },
+    ];
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
@@ -45,13 +50,13 @@ describe('AkrSelect', () => {
     });
 
     it('should select an option and close the popup in single selection mode', async () => {
-        // Open the popup
         component['toggleExpanded']();
         fixture.detectChanges();
 
-        // Find and click the first option
         const firstOption = mockOptions[0];
-        component['onSelectionChange']({ value: [firstOption] } as any);
+        // Create a mock event by casting through unknown to bypass strict property checks
+        const event = { value: [firstOption] } as unknown as ListboxValueChangeEvent<AkrSelectOption>;
+        component['onSelectionChange'](event);
         fixture.detectChanges();
 
         expect(component.selected()).toEqual(firstOption);
@@ -63,11 +68,12 @@ describe('AkrSelect', () => {
         fixture.detectChanges();
 
         const selections = [mockOptions[0], mockOptions[1]];
-        component['onSelectionChange']({ value: selections } as any);
+        // Create a mock event by casting through unknown
+        const event = { value: selections } as unknown as ListboxValueChangeEvent<AkrSelectOption>;
+        component['onSelectionChange'](event);
         fixture.detectChanges();
 
         expect(component.selected()).toEqual(selections);
-        // Popup stays open in multiple mode usually, but check current implementation
         expect(component['expanded']()).toBe(false);
     });
 

@@ -26,9 +26,14 @@ let nextId = 0;
  */
 export interface AkrSelectOption {
     /**
+     * The internal value of the option.
+     */
+    value: unknown;
+
+    /**
      * The display label of the option.
      */
-    value: string;
+    label: string;
 
     /**
      * Arbitrary data passed to the custom icon template.
