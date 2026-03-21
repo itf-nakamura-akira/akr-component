@@ -50,7 +50,20 @@
         (keydown)="onListboxKeyDown($event)"
         [attr.tabindex]="0"
     >
-        @for (option of options(); track option.value) {
+        @if (filterable()) {
+            <div class="akr-select-filter-container" (click)="$event.stopPropagation()">
+                <input
+                    #filterInput
+                    akr-input
+                    type="text"
+                    [placeholder]="filterPlaceholder()"
+                    [value]="filterText()"
+                    (input)="onFilterInput($event)"
+                    (keydown)="$event.stopPropagation()"
+                />
+            </div>
+        }
+        @for (option of filteredOptions(); track option.value) {
             <div [cdkOption]="option" [cdkOptionDisabled]="option.disabled ?? false" class="akr-option">
                 @if (option.icon && iconTemplate()) {
                     <span class="akr-option-icon">

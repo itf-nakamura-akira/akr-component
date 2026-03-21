@@ -52,6 +52,25 @@ export default class SelectDoc {
         return val.length > 0 ? val.map((v) => v.label).join(', ') : 'None';
     });
 
+    /** Country options for filtering example */
+    readonly countryOptions = signal<AkrSelectOption[]>([
+        { value: 'us', label: 'United States', icon: 'flag' },
+        { value: 'jp', label: 'Japan', icon: 'flag' },
+        { value: 'gb', label: 'United Kingdom', icon: 'flag' },
+        { value: 'de', label: 'Germany', icon: 'flag' },
+        { value: 'fr', label: 'France', icon: 'flag' },
+        { value: 'it', label: 'Italy', icon: 'flag' },
+        { value: 'ca', label: 'Canada', icon: 'flag' },
+        { value: 'au', label: 'Australia', icon: 'flag' },
+        { value: 'br', label: 'Brazil', icon: 'flag' },
+        { value: 'in', label: 'India', icon: 'flag' },
+        { value: 'cn', label: 'China', icon: 'flag' },
+        { value: 'kr', label: 'South Korea', icon: 'flag' },
+    ]);
+
+    /** Current selected country */
+    readonly selectedCountry = signal<AkrSelectOption | undefined>(undefined);
+
     /** Payment method options */
     readonly paymentOptions = signal<AkrSelectOption[]>([
         { value: 'cc', label: 'Credit Card', icon: 'credit_card' },

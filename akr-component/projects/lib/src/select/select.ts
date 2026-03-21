@@ -17,6 +17,7 @@ import {
     viewChild,
     viewChildren,
 } from '@angular/core';
+import { AkrInput } from '../input/input';
 import { AkrIcon } from '../internal/icon/icon';
 
 let nextId = 0;
@@ -26,14 +27,14 @@ let nextId = 0;
  */
 export interface AkrSelectOption {
     /**
-     * The internal value of the option.
-     */
-    value: unknown;
-
-    /**
      * The display label of the option.
      */
     label: string;
+
+    /**
+     * The internal value of the option.
+     */
+    value: unknown;
 
     /**
      * Arbitrary data passed to the custom icon template.
@@ -76,7 +77,7 @@ export class AkrSelectOptionIcon {
  */
 @Component({
     selector: 'akr-select',
-    imports: [OverlayModule, NgTemplateOutlet, AkrIcon, CdkListboxModule],
+    imports: [OverlayModule, NgTemplateOutlet, AkrIcon, CdkListboxModule, AkrInput],
     templateUrl: './select.html',
     styleUrl: './select.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -98,6 +99,12 @@ export class AkrSelect {
      * @internal
      */
     protected readonly expanded = signal(false);
+
+    /**
+     * The current search text used for filtering options.
+     * @internal
+     */
+    protected readonly filterText = signal('');
 
     /**
      * Reference to the user-provided icon template via content projection.
@@ -124,6 +131,12 @@ export class AkrSelect {
     protected readonly trigger = viewChild<ElementRef<HTMLElement>>('trigger');
 
     /**
+     * Reference to the filter input element.
+     * @internal
+     */
+    protected readonly filterInput = viewChild<ElementRef<HTMLInputElement>>('filterInput');
+
+    /**
      * Normalizes the `selected` value into a consistent array for internal rendering.
      * @internal
      */
@@ -135,6 +148,21 @@ export class AkrSelect {
         }
 
         return Array.isArray(val) ? (val as AkrSelectOption[]) : [val as AkrSelectOption];
+    });
+
+    /**
+     * The collection of options filtered by the search text.
+     * @internal
+     */
+    protected readonly filteredOptions = computed(() => {
+        const query = this.filterText().toLowerCase();
+        const allOptions = this.options();
+
+        if (!query) {
+            return allOptions;
+        }
+
+        return allOptions.filter((option) => option.label.toLowerCase().includes(query));
     });
 
     /**
@@ -161,10 +189,22 @@ export class AkrSelect {
     readonly multiple = input<boolean>(false);
 
     /**
+     * Whether to show a search box to filter options.
+     * @default false
+     */
+    readonly filterable = input<boolean>(false);
+
+    /**
      * Placeholder text to display when no options are selected.
      * @default ''
      */
     readonly placeholder = input<string>('');
+
+    /**
+     * Placeholder text for the filter search box.
+     * @default 'Search...'
+     */
+    readonly filterPlaceholder = input<string>('Search...');
 
     constructor() {
         /**
@@ -199,6 +239,16 @@ export class AkrSelect {
     }
 
     /**
+     * Updates the filter text based on search box input.
+     * @param event The native input event.
+     * @internal
+     */
+    protected onFilterInput(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        this.filterText.set(input.value);
+    }
+
+    /**
      * Manages keyboard shortcuts on the listbox popup, such as closing on Escape.
      * @param event The native keyboard event.
      * @internal
@@ -228,12 +278,19 @@ export class AkrSelect {
             }
 
             const wasExpanded = this.expanded();
-            this.expanded.update((v) => !v);
+            const isExpanding = !wasExpanded;
 
-            // Automatic focus transition to the listbox when opened
-            if (!wasExpanded) {
+            this.expanded.set(isExpanding);
+
+            if (isExpanding) {
+                // When opening, reset the filter and set focus appropriately
+                this.filterText.set('');
                 setTimeout(() => {
-                    this.listbox()?.focus();
+                    if (this.filterable()) {
+                        this.filterInput()?.nativeElement?.focus();
+                    } else {
+                        this.listbox()?.focus();
+                    }
                 });
             }
         }
@@ -255,7 +312,11 @@ export class AkrSelect {
             if (!this.expanded()) {
                 this.toggleExpanded();
             } else {
-                this.listbox()?.focus();
+                if (this.filterable()) {
+                    this.filterInput()?.nativeElement?.focus();
+                } else {
+                    this.listbox()?.focus();
+                }
             }
         }
     }

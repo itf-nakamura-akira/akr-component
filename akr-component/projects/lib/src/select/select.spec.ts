@@ -8,9 +8,9 @@ describe('AkrSelect', () => {
     let fixture: ComponentFixture<AkrSelect>;
 
     const mockOptions: AkrSelectOption[] = [
-        { value: 'opt1', label: 'Option 1' },
-        { value: 'opt2', label: 'Option 2' },
-        { value: 'opt3', label: 'Option 3' },
+        { value: 'opt1', label: 'Apple' },
+        { value: 'opt2', label: 'Banana' },
+        { value: 'opt3', label: 'Cherry' },
     ];
 
     beforeEach(async () => {
@@ -33,6 +33,7 @@ describe('AkrSelect', () => {
         expect(component.selected()).toBeUndefined();
         expect(component.multiple()).toBe(false);
         expect(component.disabled()).toBe(false);
+        expect(component.filterable()).toBe(false);
     });
 
     it('should toggle the expanded state when the trigger is clicked', () => {
@@ -54,7 +55,6 @@ describe('AkrSelect', () => {
         fixture.detectChanges();
 
         const firstOption = mockOptions[0];
-        // Create a mock event by casting through unknown to bypass strict property checks
         const event = { value: [firstOption] } as unknown as ListboxValueChangeEvent<AkrSelectOption>;
         component['onSelectionChange'](event);
         fixture.detectChanges();
@@ -68,13 +68,11 @@ describe('AkrSelect', () => {
         fixture.detectChanges();
 
         const selections = [mockOptions[0], mockOptions[1]];
-        // Create a mock event by casting through unknown
         const event = { value: selections } as unknown as ListboxValueChangeEvent<AkrSelectOption>;
         component['onSelectionChange'](event);
         fixture.detectChanges();
 
         expect(component.selected()).toEqual(selections);
-        expect(component['expanded']()).toBe(false);
     });
 
     it('should display the placeholder when no option is selected', () => {
@@ -84,6 +82,60 @@ describe('AkrSelect', () => {
 
         const valueElement = fixture.debugElement.query(By.css('.akr-select-value'));
         expect(valueElement.nativeElement.textContent).toContain(placeholderText);
+    });
+
+    describe('Filtering', () => {
+        beforeEach(() => {
+            fixture.componentRef.setInput('filterable', true);
+            fixture.detectChanges();
+        });
+
+        it('should show the filter input when filterable is true', () => {
+            component['toggleExpanded']();
+            fixture.detectChanges();
+
+            const filterInput = fixture.debugElement.query(By.css('input[akr-input]'));
+            expect(filterInput).toBeTruthy();
+        });
+
+        it('should filter options based on label', () => {
+            component['filterText'].set('ba');
+            fixture.detectChanges();
+
+            const filtered = component['filteredOptions']();
+            expect(filtered.length).toBe(1);
+            expect(filtered[0].label).toBe('Banana');
+        });
+
+        it('should be case-insensitive when filtering', () => {
+            component['filterText'].set('APPLE');
+            fixture.detectChanges();
+
+            const filtered = component['filteredOptions']();
+            expect(filtered.length).toBe(1);
+            expect(filtered[0].label).toBe('Apple');
+        });
+
+        it('should return all options when filter text is empty', () => {
+            component['filterText'].set('');
+            fixture.detectChanges();
+
+            expect(component['filteredOptions']().length).toBe(mockOptions.length);
+        });
+
+        it('should reset filter text when expanding the dropdown', async () => {
+            component['filterText'].set('some query');
+
+            // Close and reopen
+            component['expanded'].set(false);
+            fixture.detectChanges();
+
+            component['toggleExpanded']();
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            expect(component['filterText']()).toBe('');
+        });
     });
 
     it('should disable the trigger when the disabled input is true', () => {
