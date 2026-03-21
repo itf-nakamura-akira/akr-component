@@ -55,6 +55,11 @@ export class Layout {
                     value: 'components/radio-button',
                     routerLink: '/components/radio-button',
                 },
+                {
+                    name: 'Select',
+                    value: 'components/select',
+                    routerLink: '/components/select',
+                },
             ],
         },
     ];

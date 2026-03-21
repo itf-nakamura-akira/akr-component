@@ -9,3 +9,4 @@ export * from './input/input';
 export * from './navigation-tree/navigation-tree';
 export * from './radio-button/radio-button';
 export * from './radio-button/radio-button-group';
+export * from './select/select';

@@ -1,0 +1,83 @@
+<h1>Select</h1>
+<p>An accessible dropdown component with single and multiple selection support.</p>
+
+<section>
+    <h2>Basic Select</h2>
+    <p>A simple select with text-only options and a custom placeholder.</p>
+    <div class="example">
+        <akr-select [options]="languageOptions()" placeholder="Select language"></akr-select>
+    </div>
+</section>
+
+<section>
+    <h2>Two-way Data Binding</h2>
+    <p>
+        Use the <code>[(value)]</code> directive to synchronize the selected option. Selected:
+        <strong>{{ selectedLanguageLabel() }}</strong>
+    </p>
+    <div class="example">
+        <akr-select
+            [(value)]="selectedLanguage"
+            [options]="languageOptions()"
+            placeholder="Choose a language"
+        ></akr-select>
+    </div>
+</section>
+
+<section>
+    <h2>Multi-select</h2>
+    <p>
+        Enable multiple selection by setting the <code>[multiple]</code> input to <code>true</code>. Selected:
+        <strong>{{ selectedPrioritiesLabel() }}</strong>
+    </p>
+    <div class="example">
+        <akr-select
+            [(value)]="selectedPriorities"
+            [options]="priorityOptions()"
+            [multiple]="true"
+            placeholder="Select priorities"
+        >
+            <ng-template akrSelectOptionIcon let-icon>
+                <span class="material-symbols-outlined" translate="no" aria-hidden="true">
+                    {{ icon }}
+                </span>
+            </ng-template>
+        </akr-select>
+    </div>
+</section>
+
+<section>
+    <h2>Select with Icons</h2>
+    <p>Customizing options with status icons for better visual recognition.</p>
+    <div class="example">
+        <akr-select [options]="priorityOptions()" placeholder="Set priority">
+            <ng-template akrSelectOptionIcon let-icon>
+                <span class="material-symbols-outlined" translate="no" aria-hidden="true">
+                    {{ icon }}
+                </span>
+            </ng-template>
+        </akr-select>
+    </div>
+</section>
+
+<section>
+    <h2>Disabled Options</h2>
+    <p>Individual options can be disabled to prevent selection, such as unavailable payment methods.</p>
+    <div class="example">
+        <akr-select [options]="paymentOptions()" placeholder="Choose payment method">
+            <ng-template akrSelectOptionIcon let-icon>
+                <span class="material-symbols-outlined" translate="no" aria-hidden="true">
+                    {{ icon }}
+                </span>
+            </ng-template>
+        </akr-select>
+    </div>
+</section>
+
+<section>
+    <h2>Disabled Select</h2>
+    <p>The entire component can be disabled when the feature is unavailable.</p>
+    <div class="example">
+        <akr-select [options]="languageOptions()" [disabled]="true" placeholder="Not available"></akr-select>
+    </div>
+</section>
