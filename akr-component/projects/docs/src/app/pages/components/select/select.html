@@ -12,12 +12,12 @@
 <section>
     <h2>Two-way Data Binding</h2>
     <p>
-        Use the <code>[(value)]</code> directive to synchronize the selected option. Selected:
+        Use the <code>[(selected)]</code> directive to synchronize the selected option. Selected:
         <strong>{{ selectedLanguageLabel() }}</strong>
     </p>
     <div class="example">
         <akr-select
-            [(value)]="selectedLanguage"
+            [(selected)]="selectedLanguage"
             [options]="languageOptions()"
             placeholder="Choose a language"
         ></akr-select>
@@ -31,7 +31,7 @@
         <strong>{{ selectedTagsLabel() }}</strong>
     </p>
     <div class="example">
-        <akr-select [(value)]="selectedTags" [options]="tagOptions()" [multiple]="true" placeholder="Select tags">
+        <akr-select [(selected)]="selectedTags" [options]="tagOptions()" [multiple]="true" placeholder="Select tags">
         </akr-select>
     </div>
 </section>

@@ -18,47 +18,38 @@ import { isActive, Router, RouterLink, RouterLinkActive } from '@angular/router'
 import { AkrIcon } from '../internal/icon/icon';
 
 /**
- * Interface for a tree node.
+ * Data structure representing a node in the navigation tree.
  */
 export interface TreeNode {
-    /**
-     * The display name of the node.
-     */
+    /** The visible label of the node. */
     name: string;
-
-    /**
-     *  The unique value identifier for the node.
-     */
+    /** The unique identifier for the node. */
     value: string;
-
-    /**
-     * Optional icon name for the node.
-     */
+    /** Optional name of the icon to display. */
     icon?: string;
-
-    /**
-     * Optional child nodes for nested structure.
-     */
+    /** Nested child nodes for hierarchical structures. */
     children?: TreeNode[];
-
-    /**
-     * Whether the node is disabled.
-     */
+    /** Whether the node is interaction-disabled. */
     disabled?: boolean;
-
-    /**
-     * Whether the node is expanded (for parent nodes).
-     */
+    /** Whether the node is initially expanded. */
     expanded?: boolean;
-
-    /**
-     * The route to navigate to when the node is clicked.
-     */
+    /** The route destination to navigate to when the node is clicked. */
     routerLink?: string | unknown[];
 }
 
 /**
- * Directive to provide a custom icon for navigation tree nodes.
+ * Custom Icon Template Directive.
+ *
+ * Use this to provide custom icon rendering for navigation tree nodes.
+ *
+ * @example
+ * ```html
+ * <akr-navigation-tree [nodes]="data">
+ *     <ng-template akrNavigationTreeIcon let-node>
+ *         <my-custom-icon [name]="node.icon" />
+ *     </ng-template>
+ * </akr-navigation-tree>
+ * ```
  */
 @Directive({
     selector: '[akrNavigationTreeIcon]',
@@ -66,6 +57,7 @@ export interface TreeNode {
 export class AkrNavigationTreeIcon {
     /**
      * The template reference for the custom icon.
+     * @internal
      */
     readonly template = inject<TemplateRef<{ $implicit: TreeNode }>>(TemplateRef);
 }
@@ -73,7 +65,7 @@ export class AkrNavigationTreeIcon {
 /**
  * Navigation Tree Component.
  *
- * This component displays a hierarchical navigation tree with support for routing, selection, and expansion.
+ * Renders a hierarchical navigation structure with support for routing and state persistence.
  */
 @Component({
     selector: 'akr-navigation-tree',
@@ -84,13 +76,14 @@ export class AkrNavigationTreeIcon {
 })
 export class AkrNavigationTree {
     /**
-     * Router instance for navigation and URL matching.
+     * Angular router instance.
+     * @internal
      */
     private readonly router = inject(Router);
 
     /**
-     * Flattened nodes with their isActive signals used for router link status.
-     * This list is computed from the tree structure to allow efficient URL matching.
+     * List of nodes with their associated router link status signals.
+     * @internal
      */
     private readonly nodeStatusList = computed<{ node: TreeNode; active: () => boolean }[]>(() => {
         const nodes: TreeNode[] = this.nodes() ?? [];
@@ -99,12 +92,14 @@ export class AkrNavigationTree {
     });
 
     /**
-     * The currently active node in the tree based on the router URL.
+     * The node that matches the current active route.
+     * @internal
      */
     private readonly activeNode = computed(() => this.nodeStatusList().find((status) => status.active())?.node);
 
     /**
-     * The currently selected node object, derived from the `selected` signal.
+     * The node currently selected via user interaction.
+     * @internal
      */
     private readonly selectedNode = computed(() => {
         const selected: string[] = this.selected();
@@ -117,35 +112,38 @@ export class AkrNavigationTree {
     });
 
     /**
-     * The list of tree nodes to display.
+     * The hierarchical data to render.
      */
     readonly nodes = input<TreeNode[]>();
 
     /**
-     * Event emitted when a node is selected.
+     * Emits the selected `TreeNode` when the selection changes.
      */
     readonly selectionChange = output<TreeNode>();
 
     /**
-     * The currently selected node value as an array (for use with Aria Tree).
+     * Current selection state. Represented as a list of strings for Aria Tree compatibility.
+     * @internal
      */
     readonly selected = signal<string[]>([]);
 
     /**
-     * The values of currently expanded parent nodes.
+     * State of currently expanded parent nodes.
+     * @internal
      */
     readonly expandedValues = signal<Set<string>>(new Set());
 
     /**
-     * Optional custom icon template provided via content projection.
+     * Reference to the custom icon template, if provided.
+     * @internal
      */
     readonly customIcon: Signal<AkrNavigationTreeIcon | undefined> = contentChild(AkrNavigationTreeIcon);
 
     /**
-     * Initializes side-effects to synchronize the tree state with the current URL and selection.
+     * Sets up automatic synchronization between the route and tree state.
      */
     constructor() {
-        // Initialize expanded values from input nodes.
+        // Apply initial expansion from data.
         effect(() => {
             const nodes: TreeNode[] | undefined = this.nodes();
 
@@ -154,7 +152,7 @@ export class AkrNavigationTree {
             }
         });
 
-        // Automatically sync selection and expansion when active node changes.
+        // Sync with active router link.
         effect(() => {
             const active: TreeNode | undefined = this.activeNode();
 
@@ -164,7 +162,7 @@ export class AkrNavigationTree {
             }
         });
 
-        // Notify selection change.
+        // Trigger change emission.
         effect(() => {
             const node: TreeNode | undefined = this.selectedNode();
 
@@ -175,10 +173,10 @@ export class AkrNavigationTree {
     }
 
     /**
-     * Toggles the expansion state of a node.
-     *
+     * Toggles the expansion state of a branch node.
      * @param node The node to toggle.
-     * @param expanded Whether the node should be expanded.
+     * @param expanded Desired state.
+     * @internal
      */
     toggleExpanded(node: TreeNode, expanded: boolean): void {
         this.expandedValues.update((values) => {
@@ -195,9 +193,8 @@ export class AkrNavigationTree {
     }
 
     /**
-     * Initializes expanded values from the nodes input.
-     *
-     * @param nodes The list of tree nodes.
+     * Processes initial expansion based on input data.
+     * @param nodes Tree nodes.
      */
     private initializeExpandedValues(nodes: TreeNode[]): void {
         this.expandedValues.update((values) => {
@@ -210,10 +207,9 @@ export class AkrNavigationTree {
     }
 
     /**
-     * Recursively collects values of nodes that should be expanded initially.
-     *
-     * @param nodes The list of tree nodes.
-     * @param expanded The set to add expanded values to.
+     * Collects all nodes marked as expanded.
+     * @param nodes List of nodes.
+     * @param expanded Set to populate.
      */
     private collectExpandedValues(nodes: TreeNode[], expanded: Set<string>): void {
         for (const node of nodes) {
@@ -228,11 +224,10 @@ export class AkrNavigationTree {
     }
 
     /**
-     * Expands all parent nodes of the given node value.
-     *
-     * @param nodes The tree nodes to search.
-     * @param targetValue The value of the node whose ancestors should be expanded.
-     * @returns True if the target node was found in this branch, false otherwise.
+     * Recursively expands ancestors of a target node value.
+     * @param nodes Tree data.
+     * @param targetValue Value to find.
+     * @returns Whether the value was found in the current subtree.
      */
     private expandAncestors(nodes: TreeNode[], targetValue: string): boolean {
         for (const node of nodes) {
@@ -261,11 +256,10 @@ export class AkrNavigationTree {
     }
 
     /**
-     * Finds a node by its value in the tree.
-     *
-     * @param nodes The nodes to search.
-     * @param value The value to look for.
-     * @returns The found node or undefined.
+     * Locates a node by its unique value.
+     * @param nodes List of nodes.
+     * @param value Search value.
+     * @returns The node if found, otherwise undefined.
      */
     private findNodeByValue(nodes: TreeNode[], value: string): TreeNode | undefined {
         for (const node of nodes) {
@@ -286,10 +280,9 @@ export class AkrNavigationTree {
     }
 
     /**
-     * Flattens the tree nodes and creates isActive signals for each node with a routerLink.
-     *
-     * @param nodes The list of tree nodes.
-     * @returns A flat list of nodes and their active signals.
+     * Creates a flattened map for URL-to-node matching.
+     * @param nodes Tree nodes.
+     * @returns Flattened array with active route signals.
      */
     private flattenNodes(nodes: TreeNode[]): { node: TreeNode; active: () => boolean }[] {
         const flatList: { node: TreeNode; active: () => boolean }[] = [];
@@ -300,15 +293,13 @@ export class AkrNavigationTree {
     }
 
     /**
-     * Recursively traverses nodes and adds nodes with routerLinks to the list.
-     *
-     * @param items The tree nodes to traverse.
-     * @param list The list to collect flattened nodes into.
+     * Recursively traverses nodes and collects router-active signals.
+     * @param items Tree nodes.
+     * @param list Destination list.
      */
     private traverseAndCollect(items: TreeNode[], list: { node: TreeNode; active: () => boolean }[]): void {
         for (const item of items) {
             if (item.routerLink) {
-                // Create the signal-based isActive check for this link
                 const activeSignal = isActive(
                     this.router.createUrlTree(Array.isArray(item.routerLink) ? item.routerLink : [item.routerLink]),
                     this.router,

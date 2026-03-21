@@ -33,9 +33,9 @@ export class RadioButtonGroup<T = unknown> implements ControlValueAccessor {
     readonly name = input<string>(`akr-radio-group-${nextId++}`);
 
     /**
-     * The value of the selected radio button.
+     * The selected radio button value.
      */
-    readonly value = model<T>();
+    readonly selected = model<T>();
 
     /**
      * Whether the radio group is disabled.
@@ -43,22 +43,22 @@ export class RadioButtonGroup<T = unknown> implements ControlValueAccessor {
     readonly disabled = signal<boolean>(false);
 
     /**
-     * Initializes the component and sets up the synchronization between the value signal and the form control.
+     * Initializes the component and sets up the synchronization between the selected signal and the form control.
      */
     constructor() {
-        // When the value signal changes, notify the form control.
-        this.value.subscribe((val) => {
+        // When the selected signal changes, notify the form control.
+        this.selected.subscribe((val) => {
             this.onChange(val);
         });
     }
 
     /**
-     * Sets the value of the radio group.
+     * Sets the selected value of the radio group.
      * Part of the ControlValueAccessor interface.
-     * @param value The value to set.
+     * @param selected The value to set.
      */
-    writeValue(value: T): void {
-        this.value.set(value);
+    writeValue(selected: T): void {
+        this.selected.set(selected);
     }
 
     /**

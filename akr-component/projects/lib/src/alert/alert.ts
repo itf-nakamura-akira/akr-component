@@ -2,15 +2,24 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { AkrIcon } from '../internal/icon/icon';
 
 /**
- * A type that defines the severity of the alert.
+ * Severity levels for the alert component.
+ * - 'info': Informational messages.
+ * - 'success': Success confirmation.
+ * - 'warning': Warning alerts.
+ * - 'error': Error or failure alerts.
  */
 export type AlertSeverity = 'info' | 'success' | 'warning' | 'error';
 
 /**
  * Alert Component.
  *
- * An alert component for conveying important messages and feedback to users.
- * Please use them according to the situation.
+ * Provides a way to display important messages and feedback to users with different severity levels.
+ *
+ * @example
+ * ```html
+ * <akr-alert severity="success">Operation completed successfully!</akr-alert>
+ * <akr-alert severity="error" [closable]="true">Failed to save changes.</akr-alert>
+ * ```
  */
 @Component({
     selector: 'akr-alert',
@@ -21,22 +30,26 @@ export type AlertSeverity = 'info' | 'success' | 'warning' | 'error';
 })
 export class AkrAlert {
     /**
-     * Alert severity.
+     * The severity level of the alert.
+     * Required input.
      */
     readonly severity = input.required<AlertSeverity>();
 
     /**
-     * Show Icon.
+     * Whether to show the severity icon.
+     * @default true
      */
     readonly showIcon = input<boolean>(true);
 
     /**
-     * Show Close Button.
+     * Whether the alert can be closed by the user.
+     * If true, a close button is displayed.
+     * @default false
      */
     readonly closable = input<boolean>(false);
 
     /**
-     * Close button click event.
+     * Event emitted when the close button is clicked.
      */
     readonly closeAlert = output<void>();
 }

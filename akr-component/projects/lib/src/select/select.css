@@ -46,7 +46,6 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    vertical-align: middle;
     margin-right: 0.5rem;
     width: 1.25rem;
     height: 1.25rem;
@@ -55,20 +54,15 @@
 .selected-label-text {
     font-size: 0.875rem;
     color: var(--akr-foreground);
-    vertical-align: middle;
 }
 
 .select.akr-placeholder .selected-label-text {
     color: var(--akr-foreground-secondary);
 }
 
-.selected-items-wrapper {
-    display: inline;
-}
-
 .selected-item-set {
-    display: inline;
-    vertical-align: middle;
+    display: inline-flex;
+    align-items: center;
     margin-right: 0.5rem;
 }
 
@@ -80,14 +74,19 @@
     position: absolute;
     pointer-events: none;
 
-    /* Ellipsis configuration */
+    /* Center content vertically */
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.selected-items-wrapper {
     display: block;
+    width: 100%;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-
-    /* Vertical alignment for block content */
-    line-height: 2.5rem;
+    line-height: normal; /* Reset line-height to avoid shifts */
 }
 
 .arrow {

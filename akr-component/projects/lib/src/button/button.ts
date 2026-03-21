@@ -1,32 +1,33 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, input } from '@angular/core';
 
 /**
- * Supported visual variants for the button.
- * - 'solid': Filled background with brand color.
- * - 'outline': Bordered with brand color, transparent background.
- * - 'ghost': No border or background, brand color text.
- * - 'icon': Circular button optimized for housing a single icon.
+ * Supported visual style variants for the button.
+ * - 'solid': Filled background with theme color.
+ * - 'outline': Bordered with transparent background.
+ * - 'ghost': No border or background.
+ * - 'icon': Optimized for housing a single icon in a circular shape.
  */
 export type ButtonVariant = 'solid' | 'outline' | 'ghost' | 'icon';
 
 /**
- * Standardized sizes for the button component.
+ * Standard sizes for the button.
  */
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 /**
- * Color themes based on the design system's palette.
+ * Color themes based on the design system palette.
  */
 export type ButtonColor = 'primary' | 'secondary' | 'danger';
 
 /**
- * Native HTML button types for form behavior control.
+ * Native HTML button types for form behavior.
  */
 export type ButtonType = 'button' | 'submit' | 'reset';
 
 /**
- * AkrButton provides a consistent button design across the application.
- * It can be applied to either `<button>` or `<a>` elements using the `akr-button` attribute.
+ * Button Component.
+ *
+ * Provides a standardized button design. Can be used on `<button>` or `<a>` elements.
  *
  * @example
  * ```html
@@ -56,12 +57,13 @@ export type ButtonType = 'button' | 'submit' | 'reset';
 })
 export class AkrButton {
     /**
-     * ElementRef
+     * Internal reference to the host element.
+     * @internal
      */
     private readonly elementRef = inject(ElementRef);
 
     /**
-     * Determines if the host element is a native button.
+     * Whether the host element is a native button element.
      * @internal
      */
     protected get isButton(): boolean {
@@ -69,7 +71,7 @@ export class AkrButton {
     }
 
     /**
-     * The visual style variant.
+     * The visual style variant of the button.
      * @default 'solid'
      */
     readonly variant = input<ButtonVariant>('solid');
@@ -81,13 +83,13 @@ export class AkrButton {
     readonly size = input<ButtonSize>('md');
 
     /**
-     * The color theme.
+     * The color theme of the button.
      * @default 'primary'
      */
     readonly color = input<ButtonColor>('primary');
 
     /**
-     * The native HTML type attribute (only applied if the element is a `<button>`).
+     * The native HTML type attribute (applied only to `<button>` elements).
      * @default 'button'
      */
     readonly type = input<ButtonType>('button');

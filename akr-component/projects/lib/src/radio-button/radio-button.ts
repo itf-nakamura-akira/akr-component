@@ -20,9 +20,10 @@ export type RadioButtonSeverity = 'info' | 'success' | 'warning' | 'error';
         '(click)': 'onClick()',
     },
 })
-export class RadioButton<T = unknown> {
+export class AkrRadioButton<T = unknown> {
     /**
-     * Parent radio group.
+     * Parent radio group context.
+     * @internal
      */
     private readonly group = inject(
         forwardRef(() => RadioButtonGroup<T>),
@@ -31,22 +32,25 @@ export class RadioButton<T = unknown> {
 
     /**
      * Name attribute for the radio button.
-     * Inherited from group if available.
+     * Inherited from the parent group if available.
+     * @internal
      */
     protected readonly name = computed<string | null>(() => this.group?.name() ?? null);
 
     /**
-     * Whether the radio button is checked.
-     * Synchronized with the group's value.
+     * Whether the radio button is currently selected.
+     * Synchronized with the parent group's selected signal.
+     * @internal
      */
     protected readonly checked = computed<boolean>(() => {
-        const groupValue = this.group?.value();
+        const groupSelectedValue = this.group?.selected();
 
-        return groupValue !== undefined && groupValue === this.value();
+        return groupSelectedValue !== undefined && groupSelectedValue === this.value();
     });
 
     /**
-     * Effective disabled state.
+     * Effective disabled state, considering both the radio button and its parent group.
+     * @internal
      */
     protected readonly isDisabled = computed<boolean>(() => this.disabled() || (this.group?.disabled() ?? false));
 
@@ -56,7 +60,7 @@ export class RadioButton<T = unknown> {
     readonly severity = input<RadioButtonSeverity>();
 
     /**
-     * Value of the radio button.
+     * The value associated with this radio button.
      */
     readonly value = input.required<T>();
 
@@ -68,13 +72,13 @@ export class RadioButton<T = unknown> {
     /**
      * The visual variant of the radio button.
      * - 'default': Standard radio button with circle and label.
-     * - 'card': Card-style radio button.
+     * - 'card': Card-style radio button with enhanced layout.
      */
     readonly variant = input<'default' | 'card'>('default');
 
     /**
-     * Handle click on the host component.
-     * Selects the radio button if it's not disabled.
+     * Selects the radio button when clicked, if it is not disabled.
+     * @internal
      */
     protected onClick(): void {
         if (!this.isDisabled()) {
@@ -83,20 +87,20 @@ export class RadioButton<T = unknown> {
     }
 
     /**
-     * Synchronize internal input state.
-     * Triggered when the native radio input changes.
+     * Synchronizes the internal state when the native radio input changes.
+     * @internal
      */
     protected onInputChange(): void {
         this.select();
     }
 
     /**
-     * Select this radio button by updating the group value.
-     * Notifies the parent radio group of the selection.
+     * Updates the parent radio group's selected value to match this radio button.
+     * @internal
      */
     private select(): void {
         if (this.group) {
-            this.group.value.set(this.value());
+            this.group.selected.set(this.value());
         }
     }
 }

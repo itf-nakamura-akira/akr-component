@@ -13,10 +13,15 @@ export const AKR_FORM_FIELD_REQUIRED_MARK = new InjectionToken<string>('AKR_FORM
 /**
  * Form Field Component.
  *
- * This component wraps an `AkrInput` component and provides a structured layout with a label,
- * error messages, and hint messages. It automatically handles the association between the label
- * and the input for accessibility.
- * It's designed to work with standard HTML input elements using the `akr-input` directive.
+ * Wraps an `akr-input` directive and provides a structured layout with a label, error message, and hint message.
+ * It automatically handles accessibility by associating the label with the nested input.
+ *
+ * @example
+ * ```html
+ * <akr-form-field label="Username" [required]="true">
+ *     <input akr-input placeholder="Enter your username" />
+ * </akr-form-field>
+ * ```
  */
 @Component({
     selector: 'akr-form-field',
@@ -30,25 +35,27 @@ export const AKR_FORM_FIELD_REQUIRED_MARK = new InjectionToken<string>('AKR_FORM
 })
 export class AkrFormField {
     /**
-     * The content of the required mark displayed next to the label when `required` is true.
+     * The character or symbol displayed when a field is marked as required.
+     * @internal
      */
     protected readonly requiredMark = inject(AKR_FORM_FIELD_REQUIRED_MARK);
 
     /**
-     * The label text for the form field.
-     * This label is automatically associated with the wrapped input via its ID.
+     * The text to display as the field label.
      */
     readonly label = input<string>('');
 
     /**
-     * Whether the form field is marked as required.
-     * If true, the required mark (e.g., "*") will be displayed.
+     * Whether the field is mandatory.
+     * If true, the `requiredMark` is displayed next to the label.
+     * @default false
      */
     readonly required = input<boolean>(false);
 
     /**
-     * The input component projected within the form field.
-     * This is identified by the `AkrInput` class.
+     * The input component projected inside the form field.
+     * Automatically detected via the `AkrInput` class.
+     * @internal
      */
     readonly input = contentChild.required(AkrInput);
 }

@@ -45,7 +45,7 @@
             Selected value: <code>{{ selectedValue() }}</code>
         </p>
         <div class="p-6 border rounded-lg bg-gray-50">
-            <akr-radio-button-group name="demo-group" [(value)]="selectedValue" class="flex flex-col gap-2">
+            <akr-radio-button-group name="demo-group" [(selected)]="selectedValue" class="flex flex-col gap-2">
                 <akr-radio-button value="option1">Option 1 (Default)</akr-radio-button>
                 <akr-radio-button value="option2">Option 2</akr-radio-button>
                 <akr-radio-button value="option3" [disabled]="true">Option 3 (Disabled)</akr-radio-button>
@@ -57,7 +57,7 @@
         <h2 class="text-xl font-semibold mb-4">Severity Variations</h2>
         <p class="text-sm text-gray-500 mb-4">Color variations using the <code>severity</code> input.</p>
         <div class="flex flex-col gap-4 p-6 border rounded-lg bg-gray-50">
-            <akr-radio-button-group name="severity-group" value="info" class="flex flex-col gap-4">
+            <akr-radio-button-group name="severity-group" selected="info" class="flex flex-col gap-4">
                 <akr-radio-button value="info" severity="info">Info Severity</akr-radio-button>
                 <akr-radio-button value="success" severity="success">Success Severity</akr-radio-button>
                 <akr-radio-button value="warning" severity="warning">Warning Severity</akr-radio-button>
@@ -68,7 +68,7 @@
 
     <section>
         <h2 class="text-xl font-semibold mb-4">Card Variant</h2>
-        <akr-radio-button-group name="card-group" [(value)]="cardSelected">
+        <akr-radio-button-group name="card-group" [(selected)]="cardSelected">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <akr-radio-button value="plan1" variant="card">
                     <span akr-radio-title>Basic Plan</span>

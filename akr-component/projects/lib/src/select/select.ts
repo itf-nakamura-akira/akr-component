@@ -8,6 +8,7 @@ import {
     computed,
     contentChild,
     Directive,
+    inject,
     input,
     model,
     signal,
@@ -17,29 +18,44 @@ import {
 import { AkrIcon } from '../internal/icon/icon';
 
 /**
- * An option for the AkrSelect component.
+ * Data structure representing an option in the AkrSelect component.
  */
 export interface AkrSelectOption {
-    /** The value of the option. */
+    /** The visible label of the option. */
     value: string;
-    /**
-     * Optional icon data. This can be any data that your custom icon template can handle.
-     */
-    icon?: any;
-    /** Whether the option is disabled. */
+    /** Optional data for a custom icon. */
+    icon?: unknown;
+    /** Whether the option is disabled and cannot be selected. */
     disabled?: boolean;
 }
 
 /**
- * Directive to provide a custom icon template for AkrSelect options.
+ * Custom Icon Template Directive for Select Options.
+ *
+ * Use this to provide custom icon rendering for select options.
  */
 @Directive({
     selector: '[akrSelectOptionIcon]',
 })
 export class AkrSelectOptionIcon {
-    constructor(public templateRef: TemplateRef<{ $implicit: any }>) {}
+    /** @internal */
+    readonly templateRef = inject<TemplateRef<{ $implicit: unknown }>>(TemplateRef);
 }
 
+/**
+ * Select Component.
+ *
+ * An accessible dropdown component that supports single and multiple selection, custom templates, and signal-based inputs.
+ *
+ * @example
+ * ```html
+ * <akr-select
+ *     [(selected)]="selectedOption"
+ *     [options]="options"
+ *     placeholder="Select an option"
+ * />
+ * ```
+ */
 @Component({
     selector: 'akr-select',
     imports: [OverlayModule, NgTemplateOutlet, AkrIcon],
@@ -48,33 +64,59 @@ export class AkrSelectOptionIcon {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AkrSelect {
-    /** The options available for selection. */
+    /**
+     * The list of options available for selection.
+     */
     readonly options = input<AkrSelectOption[]>([]);
 
-    /** The selected value(s). */
-    readonly value = model<AkrSelectOption | AkrSelectOption[] | undefined>();
+    /**
+     * The currently selected option(s).
+     * In multiple selection mode, this is an array of options.
+     */
+    readonly selected = model<AkrSelectOption | AkrSelectOption[] | undefined>();
 
-    /** Whether the component is disabled. */
+    /**
+     * Whether the select component is disabled.
+     * @default false
+     */
     readonly disabled = input<boolean>(false);
 
-    /** Whether multiple options can be selected. */
+    /**
+     * Whether multiple options can be selected simultaneously.
+     * @default false
+     */
     readonly multiple = input<boolean>(false);
 
-    /** The placeholder text to display when no option is selected. */
+    /**
+     * Placeholder text to display when no option is selected.
+     * @default ''
+     */
     readonly placeholder = input<string>('');
 
-    /** Internal state for popup expansion. */
+    /**
+     * Internal state controlling the popup visibility.
+     * @internal
+     */
     readonly expanded = signal(false);
 
-    /** Custom icon template provided by the user. */
+    /**
+     * Custom icon template provided via content projection.
+     * @internal
+     */
     readonly iconTemplate = contentChild(AkrSelectOptionIcon, { read: TemplateRef });
 
-    /** The options available in the listbox. */
+    /**
+     * Collection of option elements within the dropdown list.
+     * @internal
+     */
     optionElements = viewChildren<Option<AkrSelectOption>>(Option);
 
-    /** Current selected items as an array. */
+    /**
+     * Computed array of currently selected items.
+     * @internal
+     */
     readonly selectedItems = computed(() => {
-        const val = this.value();
+        const val = this.selected();
 
         if (!val) {
             return [];
@@ -83,7 +125,24 @@ export class AkrSelect {
         return Array.isArray(val) ? val : [val];
     });
 
-    /** Toggle popup expansion. */
+    constructor() {
+        /**
+         * Automatically scrolls to the active item in the list when it changes.
+         */
+        afterRenderEffect(() => {
+            const option = this.optionElements().find((opt) => opt.active());
+
+            if (option) {
+                setTimeout(() => option.element.scrollIntoView({ block: 'nearest' }), 50);
+            }
+        });
+    }
+
+    /**
+     * Toggles the dropdown popup's expanded state.
+     * @param event Optional event to prevent default behavior.
+     * @internal
+     */
     toggleExpanded(event?: Event): void {
         if (!this.disabled()) {
             if (event) {
@@ -95,7 +154,12 @@ export class AkrSelect {
         }
     }
 
-    /** Manually toggle option selection. */
+    /**
+     * Manually updates the selection with a specific option.
+     * @param option The option to select or toggle.
+     * @param event Optional event to prevent default behavior.
+     * @internal
+     */
     toggleOption(option: AkrSelectOption, event?: Event): void {
         if (event) {
             event.preventDefault();
@@ -107,23 +171,28 @@ export class AkrSelect {
         }
 
         if (this.multiple()) {
-            const current = (this.value() as AkrSelectOption[]) || [];
+            const current = (this.selected() as AkrSelectOption[]) || [];
             const index = current.findIndex((o) => o.value === option.value);
 
             if (index === -1) {
-                this.value.set([...current, option]);
+                this.selected.set([...current, option]);
             } else {
-                this.value.set(current.filter((_, i) => i !== index));
+                this.selected.set(current.filter((_, i) => i !== index));
             }
         } else {
-            this.value.set(option);
+            this.selected.set(option);
             this.expanded.set(false);
         }
     }
 
-    /** Helper to check if an option is selected. */
+    /**
+     * Determines if a given option is currently selected.
+     * @param option The option to check.
+     * @returns True if the option is selected.
+     * @internal
+     */
     isOptionSelected(option: AkrSelectOption): boolean {
-        const val = this.value();
+        const val = this.selected();
 
         if (!val) {
             return false;
@@ -134,16 +203,5 @@ export class AkrSelect {
         }
 
         return (val as AkrSelectOption).value === option.value;
-    }
-
-    constructor() {
-        // Scrolls to the active item when the active option changes.
-        afterRenderEffect(() => {
-            const option = this.optionElements().find((opt) => opt.active());
-
-            if (option) {
-                setTimeout(() => option.element.scrollIntoView({ block: 'nearest' }), 50);
-            }
-        });
     }
 }
