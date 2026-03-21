@@ -31,6 +31,39 @@
     </section>
 
     <section>
+        <h2 class="text-xl font-semibold mb-4">Reactive Forms</h2>
+        <p class="text-sm text-gray-500 mb-4">
+            AkrSelect supports Angular's Reactive Forms via the <code>[formControl]</code> directive. Selected:
+            <strong>{{ controlValueLabel() }}</strong>
+        </p>
+        <div class="p-6 border rounded-lg bg-gray-50 flex flex-col gap-4">
+            <akr-select
+                [formControl]="languageControl"
+                [options]="languageOptions()"
+                placeholder="Choose a language"
+            ></akr-select>
+            <div class="flex gap-2">
+                <button
+                    akr-button
+                    variant="outline"
+                    size="sm"
+                    (click)="languageControl.setValue(languageOptions()[1].value)"
+                >
+                    Set to Japanese
+                </button>
+                <button
+                    akr-button
+                    variant="outline"
+                    size="sm"
+                    (click)="languageControl.disabled ? languageControl.enable() : languageControl.disable()"
+                >
+                    {{ languageControl.disabled ? 'Enable' : 'Disable' }}
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section>
         <h2 class="text-xl font-semibold mb-4">Filterable Select</h2>
         <p class="text-sm text-gray-500 mb-4">
             Enable option filtering by setting the <code>[filterable]</code> input to <code>true</code>.

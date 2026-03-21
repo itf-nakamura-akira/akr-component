@@ -44,7 +44,7 @@
         [id]="listboxId"
         cdkListbox
         [cdkListboxMultiple]="multiple()"
-        [cdkListboxValue]="selectedItems()"
+        [cdkListboxValue]="selectedValues()"
         (cdkListboxValueChange)="onSelectionChange($event)"
         (click)="$event.stopPropagation()"
         (keydown)="onListboxKeyDown($event)"
@@ -64,7 +64,7 @@
             </div>
         }
         @for (option of filteredOptions(); track option.value) {
-            <div [cdkOption]="option" [cdkOptionDisabled]="option.disabled ?? false" class="akr-option">
+            <div [cdkOption]="option.value" [cdkOptionDisabled]="option.disabled ?? false" class="akr-option">
                 @if (option.icon && iconTemplate()) {
                     <span class="akr-option-icon">
                         <ng-container

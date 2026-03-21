@@ -1,7 +1,22 @@
 import { ListboxValueChangeEvent } from '@angular/cdk/listbox';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { AkrSelect, AkrSelectOption } from './select';
+
+@Component({
+    standalone: true,
+    imports: [AkrSelect, ReactiveFormsModule],
+    template: `<akr-select [options]="options" [formControl]="control"></akr-select>`,
+})
+class TestWrapper {
+    options: AkrSelectOption[] = [
+        { value: 'opt1', label: 'Apple' },
+        { value: 'opt2', label: 'Banana' },
+    ];
+    control = new FormControl<unknown>(null);
+}
 
 describe('AkrSelect', () => {
     let component: AkrSelect;
@@ -15,7 +30,7 @@ describe('AkrSelect', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [AkrSelect],
+            imports: [AkrSelect, ReactiveFormsModule],
         }).compileComponents();
 
         fixture = TestBed.createComponent(AkrSelect);
@@ -50,29 +65,29 @@ describe('AkrSelect', () => {
         expect(component['expanded']()).toBe(false);
     });
 
-    it('should select an option and close the popup in single selection mode', async () => {
+    it('should select an option value and close the popup in single selection mode', async () => {
         component['toggleExpanded']();
         fixture.detectChanges();
 
         const firstOption = mockOptions[0];
-        const event = { value: [firstOption] } as unknown as ListboxValueChangeEvent<AkrSelectOption>;
+        const event = { value: [firstOption.value] } as unknown as ListboxValueChangeEvent<unknown>;
         component['onSelectionChange'](event);
         fixture.detectChanges();
 
-        expect(component.selected()).toEqual(firstOption);
+        expect(component.selected()).toEqual(firstOption.value);
         expect(component['expanded']()).toBe(false);
     });
 
-    it('should allow multiple selections when multiple is true', () => {
+    it('should allow multiple selections of values when multiple is true', () => {
         fixture.componentRef.setInput('multiple', true);
         fixture.detectChanges();
 
-        const selections = [mockOptions[0], mockOptions[1]];
-        const event = { value: selections } as unknown as ListboxValueChangeEvent<AkrSelectOption>;
+        const selectionValues = [mockOptions[0].value, mockOptions[1].value];
+        const event = { value: selectionValues } as unknown as ListboxValueChangeEvent<unknown>;
         component['onSelectionChange'](event);
         fixture.detectChanges();
 
-        expect(component.selected()).toEqual(selections);
+        expect(component.selected()).toEqual(selectionValues);
     });
 
     it('should display the placeholder when no option is selected', () => {
@@ -147,5 +162,60 @@ describe('AkrSelect', () => {
         fixture.detectChanges();
 
         expect(component['expanded']()).toBe(false);
+    });
+
+    describe('FormControl Integration', () => {
+        let wrapperFixture: ComponentFixture<TestWrapper>;
+        let wrapperComponent: TestWrapper;
+        let selectComponent: AkrSelect;
+
+        beforeEach(async () => {
+            wrapperFixture = TestBed.createComponent(TestWrapper);
+            wrapperComponent = wrapperFixture.componentInstance;
+            wrapperFixture.detectChanges();
+            await wrapperFixture.whenStable();
+
+            selectComponent = wrapperFixture.debugElement.query(By.directive(AkrSelect)).componentInstance;
+        });
+
+        it('should synchronize value from FormControl to AkrSelect', () => {
+            const option = wrapperComponent.options[1];
+            wrapperComponent.control.setValue(option.value);
+            wrapperFixture.detectChanges();
+
+            expect(selectComponent.selected()).toEqual(option.value);
+        });
+
+        it('should synchronize value from AkrSelect to FormControl', () => {
+            const option = wrapperComponent.options[0];
+            const event = { value: [option.value] } as unknown as ListboxValueChangeEvent<unknown>;
+            selectComponent['onSelectionChange'](event);
+            wrapperFixture.detectChanges();
+
+            expect(wrapperComponent.control.value).toEqual(option.value);
+        });
+
+        it('should synchronize disabled state from FormControl to AkrSelect', () => {
+            wrapperComponent.control.disable();
+            wrapperFixture.detectChanges();
+
+            expect(selectComponent['isDisabled']()).toBe(true);
+
+            wrapperComponent.control.enable();
+            wrapperFixture.detectChanges();
+
+            expect(selectComponent['isDisabled']()).toBe(false);
+        });
+
+        it('should mark the control as touched when the dropdown is closed', () => {
+            expect(wrapperComponent.control.touched).toBe(false);
+
+            selectComponent['toggleExpanded'](); // Open
+            wrapperFixture.detectChanges();
+            selectComponent['toggleExpanded'](); // Close
+            wrapperFixture.detectChanges();
+
+            expect(wrapperComponent.control.touched).toBe(true);
+        });
     });
 });

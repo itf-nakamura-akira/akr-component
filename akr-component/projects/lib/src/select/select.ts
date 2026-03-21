@@ -9,6 +9,7 @@ import {
     contentChild,
     Directive,
     ElementRef,
+    forwardRef,
     inject,
     input,
     model,
@@ -17,6 +18,7 @@ import {
     viewChild,
     viewChildren,
 } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AkrInput } from '../input/input';
 import { AkrIcon } from '../internal/icon/icon';
 
@@ -83,11 +85,18 @@ export class AkrSelectOptionIcon {
     changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
         '[class.akr-expanded]': 'expanded()',
-        '[attr.aria-disabled]': "disabled() ? 'true' : 'false'",
+        '[attr.aria-disabled]': "isDisabled() ? 'true' : 'false'",
         class: 'akr-select',
     },
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => AkrSelect),
+            multi: true,
+        },
+    ],
 })
-export class AkrSelect {
+export class AkrSelect implements ControlValueAccessor {
     /**
      * Unique identifier for the listbox element, used to establish ARIA relationships.
      * @internal
@@ -137,17 +146,45 @@ export class AkrSelect {
     protected readonly filterInput = viewChild<ElementRef<HTMLInputElement>>('filterInput');
 
     /**
-     * Normalizes the `selected` value into a consistent array for internal rendering.
+     * Internal signal to track disabled state set by Angular forms.
+     * @internal
+     */
+    private readonly _formDisabled = signal(false);
+
+    /**
+     * Combined disabled state from the input and Angular forms.
+     * @internal
+     */
+    protected readonly isDisabled = computed(() => this.disabled() || this._formDisabled());
+
+    /**
+     * The selected value(s) normalized to an array for the CDK listbox.
+     * @internal
+     */
+    protected readonly selectedValues = computed(() => {
+        const val = this.selected();
+
+        if (val === undefined || val === null) {
+            return [] as readonly unknown[];
+        }
+
+        return (Array.isArray(val) ? val : [val]) as readonly unknown[];
+    });
+
+    /**
+     * Normalizes the `selected` value into a consistent array of option objects for internal rendering.
      * @internal
      */
     protected readonly selectedItems = computed(() => {
         const val = this.selected();
+        const allOptions = this.options();
 
-        if (!val) {
+        if (val === undefined || val === null) {
             return [];
         }
 
-        return Array.isArray(val) ? (val as AkrSelectOption[]) : [val as AkrSelectOption];
+        const values = Array.isArray(val) ? val : [val];
+        return allOptions.filter((opt) => values.includes(opt.value));
     });
 
     /**
@@ -172,9 +209,9 @@ export class AkrSelect {
 
     /**
      * The currently selected value or values.
-     * Supports two-way binding. If `multiple` is true, this will be a readonly array of options.
+     * Supports two-way binding.
      */
-    readonly selected = model<AkrSelectOption | readonly AkrSelectOption[] | undefined>();
+    readonly selected = model<unknown | readonly unknown[] | undefined>();
 
     /**
      * Whether the select component is disabled.
@@ -220,15 +257,64 @@ export class AkrSelect {
     }
 
     /**
+     * Sets the value of the component.
+     * Part of the ControlValueAccessor interface.
+     * @param value The new value.
+     */
+    writeValue(value: unknown | readonly unknown[] | undefined): void {
+        this.selected.set(value);
+    }
+
+    /**
+     * Registers a callback for value changes.
+     * Part of the ControlValueAccessor interface.
+     * @param fn The callback function.
+     */
+    registerOnChange(fn: (value: unknown | readonly unknown[] | undefined) => void): void {
+        this.onChange = fn;
+    }
+
+    /**
+     * Registers a callback for blur events.
+     * Part of the ControlValueAccessor interface.
+     * @param fn The callback function.
+     */
+    registerOnTouched(fn: () => void): void {
+        this.onTouched = fn;
+    }
+
+    /**
+     * Sets the disabled state of the component.
+     * Part of the ControlValueAccessor interface.
+     * @param isDisabled Whether the component should be disabled.
+     */
+    setDisabledState(isDisabled: boolean): void {
+        this._formDisabled.set(isDisabled);
+    }
+
+    /**
+     * Callback for value changes.
+     * @internal
+     */
+    private onChange: (value: unknown | readonly unknown[] | undefined) => void = () => {};
+
+    /**
+     * Callback for blur events.
+     * @internal
+     */
+    private onTouched: () => void = () => {};
+
+    /**
      * Synchronizes the selection state when values are picked from the CDK listbox.
      * @param event The value change event emitted by the listbox.
      * @internal
      */
-    protected onSelectionChange(event: ListboxValueChangeEvent<AkrSelectOption>): void {
+    protected onSelectionChange(event: ListboxValueChangeEvent<unknown>): void {
+        let newValue: unknown | readonly unknown[] | undefined;
         if (this.multiple()) {
-            this.selected.set(event.value);
+            newValue = event.value;
         } else {
-            this.selected.set(event.value[0]);
+            newValue = event.value[0];
             this.expanded.set(false);
 
             // Focus return management for single selection
@@ -236,6 +322,10 @@ export class AkrSelect {
                 this.trigger()?.nativeElement?.focus();
             });
         }
+
+        this.selected.set(newValue);
+        this.onChange(newValue);
+        this.onTouched();
     }
 
     /**
@@ -271,7 +361,7 @@ export class AkrSelect {
      * @internal
      */
     protected toggleExpanded(event?: Event): void {
-        if (!this.disabled()) {
+        if (!this.isDisabled()) {
             if (event) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -292,6 +382,8 @@ export class AkrSelect {
                         this.listbox()?.focus();
                     }
                 });
+            } else {
+                this.onTouched();
             }
         }
     }
@@ -302,7 +394,7 @@ export class AkrSelect {
      * @internal
      */
     protected onTriggerKeyDown(event: KeyboardEvent): void {
-        if (this.disabled()) {
+        if (this.isDisabled()) {
             return;
         }
 

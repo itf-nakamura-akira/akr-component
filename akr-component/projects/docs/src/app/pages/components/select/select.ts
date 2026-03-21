@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { AkrSelect, AkrSelectOption, AkrSelectOptionIcon } from 'akr-component';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { AkrButton, AkrSelect, AkrSelectOption, AkrSelectOptionIcon } from 'akr-component';
 
 @Component({
     selector: 'app-select-doc',
-    imports: [AkrSelect, AkrSelectOptionIcon],
+    imports: [AkrSelect, AkrSelectOptionIcon, ReactiveFormsModule, AkrButton],
     templateUrl: './select.html',
     styleUrl: './select.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,13 +19,24 @@ export default class SelectDoc {
         { value: 'es', label: 'Spanish' },
     ]);
 
-    /** Current selected language object */
-    readonly selectedLanguage = signal<AkrSelectOption | undefined>(this.languageOptions()[1]);
+    /** Current selected language value */
+    readonly selectedLanguage = signal<unknown>(this.languageOptions()[1].value);
 
     /** Computed label for selected language */
     readonly selectedLanguageLabel = computed(() => {
         const val = this.selectedLanguage();
-        return val ? val.label : 'None';
+        const option = this.languageOptions().find((opt) => opt.value === val);
+        return option ? option.label : 'None';
+    });
+
+    /** Form control for reactive forms example */
+    readonly languageControl = new FormControl<unknown>(this.languageOptions()[0].value);
+
+    /** Computed label for form control */
+    readonly controlValueLabel = computed(() => {
+        const val = this.languageControl.value;
+        const option = this.languageOptions().find((opt) => opt.value === val);
+        return option ? option.label : 'None';
     });
 
     /** Task priority options */
@@ -43,13 +55,14 @@ export default class SelectDoc {
         { value: 'design', label: 'Design' },
     ]);
 
-    /** Multi-selected items */
-    readonly selectedTags = signal<readonly AkrSelectOption[]>([]);
+    /** Multi-selected item values */
+    readonly selectedTags = signal<readonly unknown[]>([]);
 
     /** Computed label for selected tags */
     readonly selectedTagsLabel = computed(() => {
-        const val = this.selectedTags();
-        return val.length > 0 ? val.map((v) => v.label).join(', ') : 'None';
+        const values = this.selectedTags();
+        const options = this.tagOptions().filter((opt) => values.includes(opt.value));
+        return options.length > 0 ? options.map((v) => v.label).join(', ') : 'None';
     });
 
     /** Country options for filtering example */
@@ -68,8 +81,8 @@ export default class SelectDoc {
         { value: 'kr', label: 'South Korea', icon: 'flag' },
     ]);
 
-    /** Current selected country */
-    readonly selectedCountry = signal<AkrSelectOption | undefined>(undefined);
+    /** Current selected country value */
+    readonly selectedCountry = signal<unknown>(undefined);
 
     /** Payment method options */
     readonly paymentOptions = signal<AkrSelectOption[]>([
