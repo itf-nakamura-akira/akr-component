@@ -59,6 +59,7 @@ export class AppComponent {
 - **Input**: 拡張されたテキスト入力フィールド。
 - **Navigation Tree**: 階層データの視覚化。
 - **Radio Button**: カスタムラジオボタンとグループ。
+- **Select**: 単一/複数選択、フィルタリングに対応したアクセシブルなドロップダウン。
 
 ## 📄 ライセンス
 

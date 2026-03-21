@@ -59,6 +59,7 @@ N'oubliez pas d'inclure les styles de la bibliothèque dans votre `angular.json`
 - **Input** : Champs de saisie de texte améliorés.
 - **Navigation Tree** : Visualisation de données hiérarchiques.
 - **Radio Button** : Boutons radio et groupes personnalisés.
+- **Select** : Composant dropdown accessible avec sélection unique/multiple et filtrage.
 
 ## 📄 Licence
 

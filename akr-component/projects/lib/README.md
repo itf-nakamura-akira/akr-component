@@ -59,6 +59,7 @@ Don't forget to include the library styles in your `angular.json` or `styles.css
 - **Input**: Enhanced text input fields.
 - **Navigation Tree**: Hierarchical data visualization.
 - **Radio Button**: Custom radio buttons and groups.
+- **Select**: Accessible dropdown component with single/multiple selection and filtering.
 
 ## 📄 License
 

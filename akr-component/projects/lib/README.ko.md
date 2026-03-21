@@ -59,6 +59,7 @@ export class AppComponent {
 - **Input**: 향상된 텍스트 입력 필드.
 - **Navigation Tree**: 계층적 데이터 시각화.
 - **Radio Button**: 커스텀 라디오 버튼 및 그룹.
+- **Select**: 단일/다중 선택 및 필터링을 지원하는 웹 접근성 준수 드롭다운.
 
 ## 📄 라이선스
 

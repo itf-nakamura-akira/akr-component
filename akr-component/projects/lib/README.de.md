@@ -59,6 +59,7 @@ Vergessen Sie nicht, die Bibliotheksstile in Ihre `angular.json` oder `styles.cs
 - **Input**: Erweiterte Texteingabefelder.
 - **Navigation Tree**: Hierarchische Datenvisualisierung.
 - **Radio Button**: Benutzerdefinierte Radio-Buttons und Gruppen.
+- **Select**: Barrierefreie Dropdown-Komponente mit Einzel-/Mehrfachauswahl und Filterung.
 
 ## 📄 Lizenz
 
