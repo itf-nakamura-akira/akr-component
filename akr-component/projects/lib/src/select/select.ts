@@ -1,4 +1,4 @@
-import { Option } from '@angular/aria/listbox';
+import { CdkListboxModule, CdkOption, ListboxValueChangeEvent } from '@angular/cdk/listbox';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { NgTemplateOutlet } from '@angular/common';
 import {
@@ -51,7 +51,7 @@ export class AkrSelectOptionIcon {
  */
 @Component({
     selector: 'akr-select',
-    imports: [OverlayModule, NgTemplateOutlet, AkrIcon],
+    imports: [OverlayModule, NgTemplateOutlet, AkrIcon, CdkListboxModule],
     templateUrl: './select.html',
     styleUrl: './select.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,7 +76,7 @@ export class AkrSelect {
     /**
      * The currently selected option(s).
      */
-    readonly selected = model<AkrSelectOption | AkrSelectOption[] | undefined>();
+    readonly selected = model<AkrSelectOption | readonly AkrSelectOption[] | undefined>();
 
     /**
      * Whether the select component is disabled.
@@ -112,7 +112,7 @@ export class AkrSelect {
      * Collection of option elements within the dropdown list.
      * @internal
      */
-    optionElements = viewChildren<Option<AkrSelectOption>>(Option);
+    optionElements = viewChildren(CdkOption);
 
     /**
      * Computed array of currently selected items.
@@ -133,12 +133,25 @@ export class AkrSelect {
          * Automatically scrolls to the active item in the list when it changes.
          */
         afterRenderEffect(() => {
-            const option = this.optionElements().find((opt) => opt.active());
+            const option = this.optionElements().find((opt) => opt.isActive());
 
             if (option) {
                 setTimeout(() => option.element.scrollIntoView({ block: 'nearest' }), 50);
             }
         });
+    }
+
+    /**
+     * Handles the selection change from the CDK listbox.
+     * @internal
+     */
+    onSelectionChange(event: ListboxValueChangeEvent<AkrSelectOption>): void {
+        if (this.multiple()) {
+            this.selected.set(event.value);
+        } else {
+            this.selected.set(event.value[0]);
+            this.expanded.set(false);
+        }
     }
 
     /**
@@ -154,52 +167,5 @@ export class AkrSelect {
 
             this.expanded.update((v) => !v);
         }
-    }
-
-    /**
-     * Manually updates the selection with a specific option.
-     * @internal
-     */
-    toggleOption(option: AkrSelectOption, event?: Event): void {
-        if (event) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-
-        if (option.disabled) {
-            return;
-        }
-
-        if (this.multiple()) {
-            const current = (this.selected() as AkrSelectOption[]) || [];
-            const index = current.findIndex((o) => o.value === option.value);
-
-            if (index === -1) {
-                this.selected.set([...current, option]);
-            } else {
-                this.selected.set(current.filter((_, i) => i !== index));
-            }
-        } else {
-            this.selected.set(option);
-            this.expanded.set(false);
-        }
-    }
-
-    /**
-     * Determines if a given option is currently selected.
-     * @internal
-     */
-    isOptionSelected(option: AkrSelectOption): boolean {
-        const val = this.selected();
-
-        if (!val) {
-            return false;
-        }
-
-        if (Array.isArray(val)) {
-            return val.some((o) => o.value === option.value);
-        }
-
-        return (val as AkrSelectOption).value === option.value;
     }
 }
