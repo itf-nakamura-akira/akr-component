@@ -12,7 +12,7 @@
             ngComboboxInput
             [aria-disabled]="disabled()"
         />
-        <span class="select-arrow material-symbols-outlined" translate="no" aria-hidden="true">arrow_drop_down</span>
+        <akr-icon class="select-arrow" name="keyboard_arrow_down" translate="no" aria-hidden="true"></akr-icon>
     </div>
     <ng-template ngComboboxPopupContainer>
         <ng-template
@@ -30,12 +30,12 @@
                                 >{{ option.icon }}</span
                             >
                             <span class="select-option-text">{{ option.label }}</span>
-                            <span
-                                class="select-option-check material-symbols-outlined"
+                            <akr-icon
+                                class="select-option-check"
+                                name="check"
                                 translate="no"
                                 aria-hidden="true"
-                                >check</span
-                            >
+                            ></akr-icon>
                         </div>
                     }
                 </div>

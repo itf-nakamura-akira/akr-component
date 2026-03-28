@@ -81,6 +81,7 @@
     right: 1rem;
     position: absolute;
     pointer-events: none;
+    width: 1.5rem;
     transition: transform 150ms ease-in-out;
 }
 
@@ -146,9 +147,12 @@
     flex-shrink: 0;
 }
 
-.select-option-icon,
-.select-option-check {
+.select-option-icon {
     font-size: 0.9rem;
+}
+
+.select-option-check {
+    width: 0.9rem;
 }
 
 .select-option-text {

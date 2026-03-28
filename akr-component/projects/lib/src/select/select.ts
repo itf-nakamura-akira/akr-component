@@ -14,6 +14,7 @@ import {
     viewChildren,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { AkrIcon } from '../internal/icon/icon';
 
 export interface AkrSelectOption {
     value: string;
@@ -23,7 +24,7 @@ export interface AkrSelectOption {
 
 @Component({
     selector: 'akr-select',
-    imports: [Combobox, ComboboxInput, ComboboxPopup, ComboboxPopupContainer, Listbox, Option, OverlayModule],
+    imports: [Combobox, ComboboxInput, ComboboxPopup, ComboboxPopupContainer, Listbox, Option, OverlayModule, AkrIcon],
     templateUrl: './select.html',
     styleUrl: './select.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
