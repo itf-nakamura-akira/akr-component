@@ -17,7 +17,7 @@ import {
     styleUrl: './select.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Select {
+export class AkrSelect {
     /** The combobox listbox popup. */
     listbox = viewChild<Listbox<string>>(Listbox);
 
