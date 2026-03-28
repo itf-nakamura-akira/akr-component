@@ -26,6 +26,13 @@
 
 .selected-label-icon {
     font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.selected-label-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 [ngComboboxInput] {
@@ -63,6 +70,7 @@
 .combobox-label {
     gap: 1rem;
     left: 1rem;
+    right: 3rem;
     display: flex;
     position: absolute;
     align-items: center;
@@ -135,6 +143,7 @@
 .select-option-icon {
     font-size: 1.25rem;
     padding-right: 1rem;
+    flex-shrink: 0;
 }
 
 .select-option-icon,
@@ -144,4 +153,7 @@
 
 .select-option-text {
     flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
