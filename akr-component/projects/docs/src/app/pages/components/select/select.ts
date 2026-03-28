@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { AkrSelect } from 'akr-component';
+import { AkrSelect, AkrSelectOption } from 'akr-component';
 
 @Component({
     selector: 'app-select',
@@ -9,9 +9,9 @@ import { AkrSelect } from 'akr-component';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class Select {
-    options = signal([
-        { label: 'Option 1', value: 1, icon: 'home' },
-        { label: 'Option 2', value: 2, icon: 'person' },
-        { label: 'Option 3', value: 3, icon: 'settings' },
+    options = signal<AkrSelectOption[]>([
+        { value: 'Home', icon: 'home' },
+        { value: 'Person', icon: 'person' },
+        { value: 'Settings', icon: 'settings' },
     ]);
 }

@@ -6,7 +6,7 @@
             }}</span>
             <span class="selected-label-text">{{ displayValue() }}</span>
         </span>
-        <input aria-label="Label dropdown" placeholder="Select a label" ngComboboxInput />
+        <input aria-label="Option dropdown" placeholder="Select an option" ngComboboxInput />
         <span class="select-arrow material-symbols-outlined" translate="no" aria-hidden="true">arrow_drop_down</span>
     </div>
     <ng-template ngComboboxPopupContainer>
@@ -16,15 +16,15 @@
         >
             <div class="select-popup-container">
                 <div ngListbox>
-                    @for (label of labels; track label.value) {
-                        <div ngOption [value]="label.value" [label]="label.value">
+                    @for (option of options(); track option.value) {
+                        <div ngOption [value]="option.value" [label]="option.value">
                             <span
                                 class="select-option-icon material-symbols-outlined"
                                 translate="no"
                                 aria-hidden="true"
-                                >{{ label.icon }}</span
+                                >{{ option.icon }}</span
                             >
-                            <span class="select-option-text">{{ label.value }}</span>
+                            <span class="select-option-text">{{ option.value }}</span>
                             <span
                                 class="select-option-check material-symbols-outlined"
                                 translate="no"
