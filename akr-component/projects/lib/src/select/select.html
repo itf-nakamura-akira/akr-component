@@ -1,4 +1,4 @@
-<div ngCombobox readonly>
+<div ngCombobox [aria-disabled]="disabled()" readonly (blur)="_handleBlur()">
     <div #origin class="select">
         <span class="combobox-label">
             <span class="selected-label-icon material-symbols-outlined" translate="no" aria-hidden="true">{{
@@ -6,7 +6,12 @@
             }}</span>
             <span class="selected-label-text">{{ displayValue() }}</span>
         </span>
-        <input aria-label="Option dropdown" placeholder="Select an option" ngComboboxInput />
+        <input
+            aria-label="Option dropdown"
+            placeholder="Select an option"
+            ngComboboxInput
+            [aria-disabled]="disabled()"
+        />
         <span class="select-arrow material-symbols-outlined" translate="no" aria-hidden="true">arrow_drop_down</span>
     </div>
     <ng-template ngComboboxPopupContainer>
@@ -15,16 +20,16 @@
             [cdkConnectedOverlayOpen]="true"
         >
             <div class="select-popup-container">
-                <div ngListbox>
+                <div ngListbox [values]="[_value()]">
                     @for (option of options(); track option.value) {
-                        <div ngOption [value]="option.value" [label]="option.value">
+                        <div ngOption [value]="option.value" [label]="option.label">
                             <span
                                 class="select-option-icon material-symbols-outlined"
                                 translate="no"
                                 aria-hidden="true"
                                 >{{ option.icon }}</span
                             >
-                            <span class="select-option-text">{{ option.value }}</span>
+                            <span class="select-option-text">{{ option.label }}</span>
                             <span
                                 class="select-option-check material-symbols-outlined"
                                 translate="no"

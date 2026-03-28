@@ -10,8 +10,8 @@ import { AkrSelect, AkrSelectOption } from 'akr-component';
 })
 export default class Select {
     options = signal<AkrSelectOption[]>([
-        { value: 'Home', icon: 'home' },
-        { value: 'Person', icon: 'person' },
-        { value: 'Settings', icon: 'settings' },
+        { value: 'home', label: 'Home', icon: 'home' },
+        { value: 'person', label: 'Person', icon: 'person' },
+        { value: 'settings', label: 'Settings', icon: 'settings' },
     ]);
 }
