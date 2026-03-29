@@ -59,10 +59,6 @@
             visibility 0s 150ms,
             opacity 150ms ease-in;
     }
-
-    &:has([ngComboboxInput][aria-expanded='true']) [ngListbox] {
-        display: flex;
-    }
 }
 
 .combobox-label {
@@ -96,6 +92,7 @@
     visibility: visible;
     border: 1px solid var(--akr-border);
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    overflow: hidden;
     transition:
         max-height 150ms ease-out,
         visibility 0s,
@@ -106,8 +103,22 @@
     gap: 2px;
     height: 100%;
     display: flex;
-    overflow: auto;
+    overflow: hidden;
     flex-direction: column;
+    scrollbar-gutter: stable;
+
+    [ngCombobox]:has([ngComboboxInput][aria-expanded='true']) & {
+        animation: allow-scroll 0s 150ms step-end forwards;
+    }
+}
+
+@keyframes allow-scroll {
+    from {
+        overflow: hidden;
+    }
+    to {
+        overflow: auto;
+    }
 }
 
 [ngOption] {
@@ -143,10 +154,6 @@
     font-size: 1.25rem;
     padding-right: 1rem;
     flex-shrink: 0;
-}
-
-.select-option-icon {
-    font-size: 0.9rem;
 }
 
 .select-option-check {
