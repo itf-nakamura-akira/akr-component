@@ -1,9 +1,15 @@
 <div ngCombobox [aria-disabled]="disabled()" readonly (blur)="_handleBlur()">
     <div #origin class="select">
         <span class="combobox-label">
-            <span class="selected-label-icon material-symbols-outlined" translate="no" aria-hidden="true">{{
-                displayIcon()
-            }}</span>
+            @if (customIcon() && selectedOption()) {
+                <ng-container
+                    *ngTemplateOutlet="customIcon()!.template; context: { $implicit: selectedOption() }"
+                ></ng-container>
+            } @else if (displayIcon()) {
+                <span class="selected-label-icon material-symbols-outlined" translate="no" aria-hidden="true">{{
+                    displayIcon()
+                }}</span>
+            }
             <span class="selected-label-text">{{ displayValue() }}</span>
         </span>
         <input
@@ -23,12 +29,18 @@
                 <div ngListbox [values]="[_value()]">
                     @for (option of options(); track option.value) {
                         <div ngOption [value]="option.value" [label]="option.label">
-                            <span
-                                class="select-option-icon material-symbols-outlined"
-                                translate="no"
-                                aria-hidden="true"
-                                >{{ option.icon }}</span
-                            >
+                            @if (customIcon()) {
+                                <ng-container
+                                    *ngTemplateOutlet="customIcon()!.template; context: { $implicit: option }"
+                                ></ng-container>
+                            } @else if (option.icon) {
+                                <span
+                                    class="select-option-icon material-symbols-outlined"
+                                    translate="no"
+                                    aria-hidden="true"
+                                    >{{ option.icon }}</span
+                                >
+                            }
                             <span class="select-option-text">{{ option.label }}</span>
                             <akr-icon
                                 class="select-option-check"

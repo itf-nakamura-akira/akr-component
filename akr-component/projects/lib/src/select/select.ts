@@ -1,15 +1,21 @@
 import { Combobox, ComboboxInput, ComboboxPopup, ComboboxPopupContainer } from '@angular/aria/combobox';
 import { Listbox, Option } from '@angular/aria/listbox';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { NgTemplateOutlet } from '@angular/common';
 import {
     afterRenderEffect,
     ChangeDetectionStrategy,
     Component,
     computed,
+    contentChild,
+    Directive,
     effect,
     forwardRef,
+    inject,
     input,
+    Signal,
     signal,
+    TemplateRef,
     viewChild,
     viewChildren,
 } from '@angular/core';
@@ -19,12 +25,35 @@ import { AkrIcon } from '../internal/icon/icon';
 export interface AkrSelectOption {
     value: string;
     label: string;
-    icon: string;
+    icon?: string;
+}
+
+/**
+ * Directive to provide a custom icon for select options.
+ */
+@Directive({
+    selector: '[akrSelectIcon]',
+})
+export class AkrSelectIcon {
+    /**
+     * The template reference for the custom icon.
+     */
+    readonly template = inject<TemplateRef<{ $implicit: AkrSelectOption }>>(TemplateRef);
 }
 
 @Component({
     selector: 'akr-select',
-    imports: [Combobox, ComboboxInput, ComboboxPopup, ComboboxPopupContainer, Listbox, Option, OverlayModule, AkrIcon],
+    imports: [
+        Combobox,
+        ComboboxInput,
+        ComboboxPopup,
+        ComboboxPopupContainer,
+        Listbox,
+        Option,
+        OverlayModule,
+        AkrIcon,
+        NgTemplateOutlet,
+    ],
     templateUrl: './select.html',
     styleUrl: './select.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,21 +78,29 @@ export class AkrSelect implements ControlValueAccessor {
     /** The options that are available for selection. */
     options = input<AkrSelectOption[]>([]);
 
+    /** Optional custom icon template provided via content projection. */
+    readonly customIcon: Signal<AkrSelectIcon | undefined> = contentChild(AkrSelectIcon);
+
     /** The current value of the select. */
     protected readonly _value = signal<string | null>(null);
 
     /** Whether the select is disabled. */
     protected readonly disabled = signal(false);
 
+    /** The currently selected option. */
+    selectedOption = computed(() => {
+        return this.options().find((opt) => opt.value === this._value());
+    });
+
     /** The icon that is displayed in the combobox. */
     displayIcon = computed(() => {
-        const option = this.options().find((opt) => opt.value === this._value());
-        return option ? option.icon : '';
+        const option = this.selectedOption();
+        return option && option.icon ? option.icon : '';
     });
 
     /** The string that is displayed in the combobox. */
     displayValue = computed(() => {
-        const option = this.options().find((opt) => opt.value === this._value());
+        const option = this.selectedOption();
         return option ? option.label : 'Select an option';
     });
 
