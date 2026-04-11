@@ -4,6 +4,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { NgTemplateOutlet } from '@angular/common';
 import {
     afterRenderEffect,
+    booleanAttribute,
     ChangeDetectionStrategy,
     Component,
     computed,
@@ -33,6 +34,8 @@ export interface AkrSelectOption<T = string> {
     label: string;
     /** Optional icon name to display alongside the label. */
     icon?: string;
+    /** Whether the option is disabled. */
+    disabled?: boolean;
 }
 
 /**
@@ -81,8 +84,14 @@ export class AkrSelect<T = string> implements ControlValueAccessor {
     /** Internal signal holding the currently selected value. */
     protected readonly _value = signal<T | null>(null);
 
-    /** Internal signal tracking whether the component is disabled. */
-    protected readonly disabled = signal(false);
+    /** Whether the component is disabled. */
+    readonly disabled = input<boolean, unknown>(false, { transform: booleanAttribute });
+
+    /** Internal signal tracking whether the component is disabled by the form control. */
+    private readonly _disabled = signal(false);
+
+    /** Computed signal for the final disabled state. */
+    protected readonly isDisabled = computed(() => this.disabled() || this._disabled());
 
     /** The internal listbox used for option selection. */
     readonly listbox = viewChild<Listbox<T>>(Listbox);
@@ -186,7 +195,7 @@ export class AkrSelect<T = string> implements ControlValueAccessor {
      * @returns void
      */
     setDisabledState(isDisabled: boolean): void {
-        this.disabled.set(isDisabled);
+        this._disabled.set(isDisabled);
     }
 
     /**

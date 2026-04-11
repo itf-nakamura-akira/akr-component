@@ -21,6 +21,12 @@ export default class Select {
         { value: 'settings', label: 'Settings', icon: 'settings' },
     ]);
 
+    disabledOptions = signal<AkrSelectOption[]>([
+        { value: 'available', label: 'Available' },
+        { value: 'disabled', label: 'Disabled', disabled: true },
+        { value: 'another', label: 'Another Available' },
+    ]);
+
     selected = signal<string | null>(null);
 
     handleSelection(value: string | null) {

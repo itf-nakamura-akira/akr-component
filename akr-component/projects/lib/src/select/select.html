@@ -1,4 +1,4 @@
-<div ngCombobox [aria-disabled]="disabled()" readonly (blur)="_handleBlur()">
+<div ngCombobox [aria-disabled]="isDisabled()" readonly (blur)="_handleBlur()">
     <div #origin class="select">
         <span class="combobox-label">
             @if (customIcon() && selectedOption()) {
@@ -12,12 +12,7 @@
             }
             <span class="selected-label-text">{{ displayValue() }}</span>
         </span>
-        <input
-            aria-label="Option dropdown"
-            placeholder="Select an option"
-            ngComboboxInput
-            [aria-disabled]="disabled()"
-        />
+        <input aria-label="Option dropdown" placeholder="Select an option" ngComboboxInput [disabled]="isDisabled()" />
         <akr-icon class="select-arrow" name="keyboard_arrow_down" translate="no" aria-hidden="true"></akr-icon>
     </div>
     <ng-template ngComboboxPopupContainer>
@@ -28,7 +23,7 @@
             <div class="select-popup-container">
                 <div ngListbox [values]="[_value()]">
                     @for (option of options(); track option.value) {
-                        <div ngOption [value]="option.value" [label]="option.label">
+                        <div ngOption [value]="option.value" [label]="option.label" [disabled]="option.disabled">
                             @if (customIcon()) {
                                 <ng-container
                                     *ngTemplateOutlet="customIcon()!.template; context: { $implicit: option }"

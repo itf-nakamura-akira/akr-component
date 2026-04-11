@@ -12,6 +12,25 @@
     </section>
 
     <section class="flex flex-col gap-4">
+        <h2 class="text-xl font-semibold mb-4">Disabled Options</h2>
+        <p class="text-gray-600">Individual options can be disabled by setting the <code>disabled</code> property.</p>
+        <div>
+            <akr-select placeholder="Select an option" [options]="disabledOptions()"></akr-select>
+        </div>
+    </section>
+
+    <section class="flex flex-col gap-4">
+        <h2 class="text-xl font-semibold mb-4">Disabled Select</h2>
+        <p class="text-gray-600">
+            The entire select component can be disabled by setting the <code>disabled</code> property or via Reactive
+            Forms.
+        </p>
+        <div class="flex flex-col gap-2">
+            <akr-select placeholder="Disabled select" [options]="basicOptions()" disabled></akr-select>
+        </div>
+    </section>
+
+    <section class="flex flex-col gap-4">
         <h2 class="text-xl font-semibold mb-4">Selection Event</h2>
         <p class="text-gray-600">
             The <code>selectionChange</code> event is emitted whenever the selected value changes.
