@@ -13,6 +13,7 @@ import {
     forwardRef,
     inject,
     input,
+    output,
     Signal,
     signal,
     TemplateRef,
@@ -22,25 +23,36 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AkrIcon } from '../internal/icon/icon';
 
-export interface AkrSelectOption {
-    value: string;
+/**
+ * Represents an option in the select component.
+ */
+export interface AkrSelectOption<T = string> {
+    /** The unique value of the option. */
+    value: T;
+    /** The display label of the option. */
     label: string;
+    /** Optional icon name to display alongside the label. */
     icon?: string;
 }
 
 /**
  * Directive to provide a custom icon for select options.
+ * Used as a structural directive inside the select component.
  */
 @Directive({
     selector: '[akrSelectIcon]',
 })
-export class AkrSelectIcon {
+export class AkrSelectIcon<T = string> {
     /**
      * The template reference for the custom icon.
      */
-    readonly template = inject<TemplateRef<{ $implicit: AkrSelectOption }>>(TemplateRef);
+    readonly template = inject<TemplateRef<{ $implicit: AkrSelectOption<T> }>>(TemplateRef);
 }
 
+/**
+ * A custom select component built with Angular CDK and ARIA patterns.
+ * Supports single selection, icons, and custom templates.
+ */
 @Component({
     selector: 'akr-select',
     imports: [
@@ -65,56 +77,57 @@ export class AkrSelectIcon {
         },
     ],
 })
-export class AkrSelect implements ControlValueAccessor {
-    /** The combobox listbox popup. */
-    listbox = viewChild<Listbox<string>>(Listbox);
+export class AkrSelect<T = string> implements ControlValueAccessor {
+    /** Internal signal holding the currently selected value. */
+    protected readonly _value = signal<T | null>(null);
 
-    /** The options available in the listbox. */
-    optionElements = viewChildren<Option<string>>(Option);
-
-    /** A reference to the ng aria combobox. */
-    combobox = viewChild<Combobox<string>>(Combobox);
-
-    /** The options that are available for selection. */
-    options = input<AkrSelectOption[]>([]);
-
-    /** Optional custom icon template provided via content projection. */
-    readonly customIcon: Signal<AkrSelectIcon | undefined> = contentChild(AkrSelectIcon);
-
-    /** The current value of the select. */
-    protected readonly _value = signal<string | null>(null);
-
-    /** Whether the select is disabled. */
+    /** Internal signal tracking whether the component is disabled. */
     protected readonly disabled = signal(false);
 
-    /** The currently selected option. */
-    selectedOption = computed(() => {
-        return this.options().find((opt) => opt.value === this._value());
-    });
+    /** The internal listbox used for option selection. */
+    readonly listbox = viewChild<Listbox<T>>(Listbox);
 
-    /** The icon that is displayed in the combobox. */
-    displayIcon = computed(() => {
+    /** The rendered option elements in the listbox. */
+    readonly optionElements = viewChildren<Option<T>>(Option);
+
+    /** The ARIA combobox that manages the overall interaction. */
+    readonly combobox = viewChild<Combobox<T>>(Combobox);
+
+    /** The list of options available for selection. */
+    readonly options = input.required<AkrSelectOption<T>[]>();
+
+    /** Optional placeholder text displayed when no value is selected. */
+    readonly placeholder = input<string>('Select an option');
+
+    /** Optional custom icon template provided by the user via `*akrSelectIcon`. */
+    readonly customIcon: Signal<AkrSelectIcon<T> | undefined> = contentChild(AkrSelectIcon);
+
+    /** Computed signal that returns the full option object for the current value. */
+    readonly selectedOption = computed(() => this.options().find((opt) => opt.value === this._value()));
+
+    /** Computed signal for the icon name to be displayed in the trigger. */
+    readonly displayIcon = computed(() => {
         const option = this.selectedOption();
         return option && option.icon ? option.icon : '';
     });
 
-    /** The string that is displayed in the combobox. */
-    displayValue = computed(() => {
+    /** Computed signal for the label text shown in the trigger. */
+    readonly displayValue = computed(() => {
         const option = this.selectedOption();
-        return option ? option.label : 'Select an option';
+        return option ? option.label : this.placeholder();
     });
 
-    /** Callback for when the value changes. */
-    private _onChange: (value: string | null) => void = () => {};
-
-    /** Callback for when the component is touched. */
-    private _onTouched: () => void = () => {};
+    /** Event emitted when the selected value changes. */
+    readonly selectionChange = output<T | null>();
 
     constructor() {
-        // Syncs the internal value with the listbox value.
+        // Automatically syncs the internal value signal when the listbox selection changes.
         effect(() => {
             const listbox = this.listbox();
-            if (!listbox) return;
+
+            if (!listbox) {
+                return;
+            }
 
             const values = listbox.values();
             const newValue = values.length ? values[0] : null;
@@ -122,16 +135,17 @@ export class AkrSelect implements ControlValueAccessor {
             if (newValue !== this._value()) {
                 this._value.set(newValue);
                 this._onChange(newValue);
+                this.selectionChange.emit(newValue);
             }
         });
 
-        // Scrolls to the active item when the active option changes.
-        // The slight delay here is to ensure animations are done before scrolling.
+        // Ensures the active option is scrolled into view whenever it changes.
         afterRenderEffect(() => {
             const option = this.optionElements().find((opt) => opt.active());
-            setTimeout(() => option?.element.scrollIntoView({ block: 'nearest' }), 50);
+            option?.element.scrollIntoView({ block: 'nearest' });
         });
-        // Resets the listbox scroll position when the combobox is closed.
+
+        // Resets the scroll position of the listbox to the top when the dropdown is closed.
         afterRenderEffect(() => {
             if (!this.combobox()?.expanded()) {
                 setTimeout(() => this.listbox()?.element.scrollTo(0, 0), 150);
@@ -139,28 +153,57 @@ export class AkrSelect implements ControlValueAccessor {
         });
     }
 
-    /** Implemented as part of ControlValueAccessor. */
-    writeValue(value: string | null): void {
+    /**
+     * Sets the value of the component. Part of ControlValueAccessor.
+     * @param value The new value to set.
+     * @returns void
+     */
+    writeValue(value: T | null): void {
         this._value.set(value);
     }
 
-    /** Implemented as part of ControlValueAccessor. */
-    registerOnChange(fn: (value: string | null) => void): void {
+    /**
+     * Registers a callback for value changes. Part of ControlValueAccessor.
+     * @param fn The callback function to be invoked when the value changes.
+     * @returns void
+     */
+    registerOnChange(fn: (value: T | null) => void): void {
         this._onChange = fn;
     }
 
-    /** Implemented as part of ControlValueAccessor. */
+    /**
+     * Registers a callback for when the component is touched. Part of ControlValueAccessor.
+     * @param fn The callback function to be invoked when the component is touched.
+     * @returns void
+     */
     registerOnTouched(fn: () => void): void {
         this._onTouched = fn;
     }
 
-    /** Implemented as part of ControlValueAccessor. */
+    /**
+     * Sets the disabled state of the component. Part of ControlValueAccessor.
+     * @param isDisabled Whether the component should be disabled.
+     * @returns void
+     */
     setDisabledState(isDisabled: boolean): void {
         this.disabled.set(isDisabled);
     }
 
-    /** Handles the blur event to mark the component as touched. */
+    /**
+     * Handles the blur event to trigger the touched state.
+     * @returns void
+     */
     protected _handleBlur() {
         this._onTouched();
     }
+
+    /** Callback invoked when the value changes, as part of ControlValueAccessor. */
+    private _onChange: (value: T | null) => void = () => {
+        // Callback registered by parent component.
+    };
+
+    /** Callback invoked when the component is blurred, as part of ControlValueAccessor. */
+    private _onTouched: () => void = () => {
+        // Callback registered by parent component.
+    };
 }

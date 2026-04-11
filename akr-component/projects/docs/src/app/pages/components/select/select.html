@@ -12,6 +12,23 @@
     </section>
 
     <section class="flex flex-col gap-4">
+        <h2 class="text-xl font-semibold mb-4">Selection Event</h2>
+        <p class="text-gray-600">
+            The <code>selectionChange</code> event is emitted whenever the selected value changes.
+        </p>
+        <div>
+            <akr-select
+                placeholder="Select an option"
+                [options]="basicOptions()"
+                (selectionChange)="handleSelection($event)"
+            ></akr-select>
+            @if (selected()) {
+                <p class="mt-2 text-gray-600 italic text-sm">Selected value: {{ selected() }}</p>
+            }
+        </div>
+    </section>
+
+    <section class="flex flex-col gap-4">
         <h2 class="text-xl font-semibold mb-4">With Custom Icons</h2>
         <p class="text-gray-600">
             You can use the <code>*akrSelectIcon</code> directive to provide a custom template for the icons.

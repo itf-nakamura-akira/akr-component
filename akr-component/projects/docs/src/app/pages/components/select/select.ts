@@ -20,4 +20,10 @@ export default class Select {
         { value: 'person', label: 'Person', icon: 'person' },
         { value: 'settings', label: 'Settings', icon: 'settings' },
     ]);
+
+    selected = signal<string | null>(null);
+
+    handleSelection(value: string | null) {
+        this.selected.set(value);
+    }
 }

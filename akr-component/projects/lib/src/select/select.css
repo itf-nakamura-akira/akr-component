@@ -105,7 +105,6 @@
     display: flex;
     overflow: hidden;
     flex-direction: column;
-    scrollbar-gutter: stable;
 
     [ngCombobox]:has([ngComboboxInput][aria-expanded='true']) & {
         animation: allow-scroll 0s 150ms step-end forwards;
